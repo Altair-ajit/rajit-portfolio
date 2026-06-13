@@ -1,0 +1,15 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "mockup",
+      "runtimeExecutable": "wsl",
+      "runtimeArgs": [
+        "bash",
+        "-c",
+        "cd /mnt/c/Users/Rajit/Desktop/rajit-portfolio/mockups && python3 -m http.server 3999 --bind 127.0.0.1"
+      ],
+      "port": 3999
+    }
+  ]
+}

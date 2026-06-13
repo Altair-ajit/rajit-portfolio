@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Style Directions — Rajit Mukhopadhyay</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, 'Segoe UI', sans-serif; background: #e8e8ec; color: #111; }
+  .intro { max-width: 900px; margin: 0 auto; padding: 48px 24px 16px; }
+  .intro h1 { font-size: 28px; margin-bottom: 8px; }
+  .intro p { color: #555; line-height: 1.5; }
+  .direction-label {
+    max-width: 900px; margin: 48px auto 12px; padding: 0 24px;
+    font-size: 14px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #666;
+  }
+  .frame {
+    max-width: 1100px; margin: 0 auto 16px; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  }
+  .note { max-width: 900px; margin: 0 auto 24px; padding: 0 24px; color: #555; font-size: 14px; line-height: 1.5; }
+
+  /* ============ DIRECTION A: MIDNIGHT TERMINAL ============ */
+  .dir-a { background: #0a0e1a; color: #e6e9f0; font-family: 'Segoe UI', sans-serif; }
+  .dir-a .nav { display: flex; justify-content: space-between; padding: 24px 48px; font-size: 13px; color: #7d8599; font-family: 'Cascadia Code', 'Consolas', monospace; }
+  .dir-a .nav .links span { margin-left: 28px; }
+  .dir-a .nav .links span.active { color: #5eead4; }
+  .dir-a .hero { padding: 70px 48px 60px; position: relative; overflow: hidden; }
+  .dir-a .hero::before {
+    content: ''; position: absolute; top: -100px; right: -100px; width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(94,234,212,0.12) 0%, transparent 70%); pointer-events: none;
+  }
+  .dir-a .kicker { font-family: 'Cascadia Code', 'Consolas', monospace; color: #5eead4; font-size: 14px; margin-bottom: 20px; }
+  .dir-a h2 { font-size: 64px; font-weight: 800; line-height: 1.05; letter-spacing: -2px; margin-bottom: 24px; }
+  .dir-a h2 .dim { color: #4a5268; }
+  .dir-a .sub { color: #9aa3b8; font-size: 18px; max-width: 560px; line-height: 1.6; }
+  .dir-a .sub b { color: #e6e9f0; font-weight: 600; }
+  .dir-a .chips { margin-top: 32px; display: flex; gap: 10px; }
+  .dir-a .chip { font-family: 'Consolas', monospace; font-size: 12px; padding: 6px 14px; border: 1px solid #2a3349; border-radius: 99px; color: #8b94ab; }
+  .dir-a .chip.hl { border-color: rgba(94,234,212,0.4); color: #5eead4; }
+  .dir-a .cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; padding: 0 48px 56px; }
+  .dir-a .card { background: #111729; border: 1px solid #1f2840; border-radius: 10px; padding: 20px; transition: transform .2s; }
+  .dir-a .card .ph { height: 90px; border-radius: 6px; background: linear-gradient(135deg, #16203a, #1b2a4a); margin-bottom: 14px; display: flex; align-items: center; justify-content: center; color: #44506e; font-size: 12px; font-family: 'Consolas', monospace; }
+  .dir-a .card h4 { font-size: 15px; margin-bottom: 6px; }
+  .dir-a .card p { font-size: 12.5px; color: #8b94ab; line-height: 1.5; }
+  .dir-a .card .tag { display: inline-block; margin-top: 10px; font-size: 10.5px; font-family: 'Consolas', monospace; color: #5eead4; }
+
+  /* ============ DIRECTION B: EDITORIAL STUDIO ============ */
+  .dir-b { background: #faf7f2; color: #1c1a17; }
+  .dir-b .nav { display: flex; justify-content: space-between; align-items: baseline; padding: 28px 56px; border-bottom: 1px solid #e5ded2; }
+  .dir-b .nav .logo { font-family: Georgia, 'Times New Roman', serif; font-size: 18px; font-style: italic; }
+  .dir-b .nav .links { font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: #6b6357; }
+  .dir-b .nav .links span { margin-left: 32px; }
+  .dir-b .hero { display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; padding: 72px 56px 64px; align-items: center; }
+  .dir-b .kicker { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: #b0763a; margin-bottom: 24px; font-weight: 600; }
+  .dir-b h2 { font-family: Georgia, 'Times New Roman', serif; font-size: 56px; font-weight: 400; line-height: 1.12; margin-bottom: 24px; }
+  .dir-b h2 em { font-style: italic; color: #b0763a; }
+  .dir-b .sub { font-size: 17px; color: #57503f; line-height: 1.7; max-width: 480px; }
+  .dir-b .portrait { aspect-ratio: 4/5; background: linear-gradient(160deg, #ece4d4, #ddd0ba); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #a99e87; font-size: 13px; letter-spacing: 1px; }
+  .dir-b .rule { height: 1px; background: #e5ded2; margin: 0 56px; }
+  .dir-b .cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; padding: 0 56px 64px; }
+  .dir-b .card { padding: 28px 24px 28px 0; border-right: 1px solid #e5ded2; margin-right: 24px; }
+  .dir-b .card:last-child { border-right: none; margin-right: 0; }
+  .dir-b .card .num { font-family: Georgia, serif; font-style: italic; color: #b0763a; font-size: 14px; margin-bottom: 12px; }
+  .dir-b .card .ph { height: 90px; background: #efe8da; border-radius: 2px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; color: #b3a78d; font-size: 12px; }
+  .dir-b .card h4 { font-family: Georgia, serif; font-size: 18px; font-weight: 500; margin-bottom: 8px; }
+  .dir-b .card p { font-size: 13px; color: #6b6357; line-height: 1.6; }
+
+  /* ============ DIRECTION C: KINETIC GRID ============ */
+  .dir-c { background: #f4f4f0; color: #16161a; font-family: 'Segoe UI', sans-serif; position: relative; }
+  .dir-c .nav { display: flex; justify-content: space-between; padding: 20px 40px; border-bottom: 2px solid #16161a; font-weight: 700; font-size: 14px; }
+  .dir-c .nav .links span { margin-left: 24px; }
+  .dir-c .hero { padding: 56px 40px; border-bottom: 2px solid #16161a; position: relative; overflow: hidden; }
+  .dir-c .hero .bigtype { font-size: 76px; font-weight: 900; line-height: 0.95; letter-spacing: -3px; text-transform: uppercase; }
+  .dir-c .hero .bigtype .outline { color: transparent; -webkit-text-stroke: 2px #16161a; }
+  .dir-c .hero .meta { display: flex; gap: 40px; margin-top: 36px; }
+  .dir-c .hero .meta div { font-size: 13px; line-height: 1.5; }
+  .dir-c .hero .meta b { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #ff4d2e; margin-bottom: 4px; }
+  .dir-c .hero .blob { position: absolute; right: 40px; top: 48px; width: 180px; height: 180px; background: #ff4d2e; border-radius: 50%; opacity: 0.92; }
+  .dir-c .hero .blob2 { position: absolute; right: 150px; top: 130px; width: 90px; height: 90px; background: #2e5bff; border-radius: 50%; }
+  .dir-c .cards { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+  .dir-c .card { border-right: 2px solid #16161a; padding: 24px; background: #f4f4f0; }
+  .dir-c .card:last-child { border-right: none; }
+  .dir-c .card:hover { background: #ffe14d; }
+  .dir-c .card .ph { height: 90px; border: 2px dashed #16161a; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .dir-c .card h4 { font-size: 16px; font-weight: 800; text-transform: uppercase; margin-bottom: 6px; }
+  .dir-c .card p { font-size: 13px; line-height: 1.5; color: #44444a; }
+  .dir-c .card .tag { display: inline-block; margin-top: 12px; font-size: 11px; font-weight: 700; background: #16161a; color: #f4f4f0; padding: 4px 10px; }
+</style>
+</head>
+<body>
+
+<div class="intro">
+  <h1>Three style directions for rajit.dev</h1>
+  <p>Each mockup shows the hero + a strip of project cards. Imagine smooth scroll-triggered animations on all three — the question is which <b>visual world</b> feels like you. Reply in the chat with A, B, or C (or a mix, e.g. "A but with C's energy").</p>
+</div>
+
+<!-- ================= A ================= -->
+<div class="direction-label">Direction A — "Midnight Terminal" · dark, cinematic, engineer-coded</div>
+<div class="frame">
+  <div class="dir-a">
+    <div class="nav">
+      <div>~/rajit</div>
+      <div class="links"><span class="active">about</span><span>journey</span><span>work</span><span>contact</span></div>
+    </div>
+    <div class="hero">
+      <div class="kicker">// engineer · builder · strategist</div>
+      <h2>Rajit<br>Mukhopadhyay<span class="dim">_</span></h2>
+      <p class="sub">I build systems end-to-end — from <b>distributed backends at AWS</b> to <b>combat robots</b>, and the product strategy in between.</p>
+      <div class="chips">
+        <span class="chip hl">AWS · SDE</span><span class="chip">UMD Computer Engineering</span><span class="chip">Quantum × ML research</span>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="ph">[ img / live demo ]</div>
+        <h4>Multi-Region Replication</h4>
+        <p>Replication orchestration for live customer data on a distributed Java backend.</p>
+        <span class="tag">→ aws</span>
+      </div>
+      <div class="card">
+        <div class="ph">[ img / live demo ]</div>
+        <h4>ECHO — Hearing Aid ML</h4>
+        <p>ML research optimizing hearing aids across sound environments. Team of 10, IRB-approved.</p>
+        <span class="tag">→ research</span>
+      </div>
+      <div class="card">
+        <div class="ph">[ img / live demo ]</div>
+        <h4>LLM Risk Tool</h4>
+        <p>Llama3-powered risk detection for enterprise IT tickets. Prevented $1M+ in losses.</p>
+        <span class="tag">→ consulting</span>
+      </div>
+    </div>
+  </div>
+</div>
+<p class="note">Feels like: a senior engineer's personal site. Glowing accents, monospace details, dark depth. Transitions would be smooth fades, parallax glow, typewriter touches.</p>
+
+<!-- ================= B ================= -->
+<div class="direction-label">Direction B — "Editorial Studio" · warm, refined, magazine-like</div>
+<div class="frame">
+  <div class="dir-b">
+    <div class="nav">
+      <div class="logo">Rajit Mukhopadhyay</div>
+      <div class="links"><span>About</span><span>Journey</span><span>Work</span><span>Contact</span></div>
+    </div>
+    <div class="hero">
+      <div>
+        <div class="kicker">Engineer · Product · Strategy</div>
+        <h2>Building things that work — and knowing <em>why</em> they matter.</h2>
+        <p class="sub">From distributed systems at AWS to boardroom strategy at BAE, I work across the full arc of how products get made.</p>
+      </div>
+      <div class="portrait">[ portrait photo ]</div>
+    </div>
+    <div class="rule"></div>
+    <div class="cards">
+      <div class="card">
+        <div class="num">01</div>
+        <div class="ph">[ image ]</div>
+        <h4>Multi-Region Replication</h4>
+        <p>Distributed replication for live customer data at AWS scale.</p>
+      </div>
+      <div class="card">
+        <div class="num">02</div>
+        <div class="ph">[ image ]</div>
+        <h4>ECHO Hearing Research</h4>
+        <p>Machine learning to adapt hearing aids to real sound environments.</p>
+      </div>
+      <div class="card">
+        <div class="num">03</div>
+        <div class="ph">[ image ]</div>
+        <h4>Enterprise Risk Tool</h4>
+        <p>LLM-driven risk detection that prevented seven figures in losses.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<p class="note">Feels like: a consultant-polished personal brand. Serif headlines, warm paper, generous whitespace. Transitions would be elegant reveals, slow image zooms, line-by-line text entrances.</p>
+
+<!-- ================= C ================= -->
+<div class="direction-label">Direction C — "Kinetic Grid" · bold, playful, high-energy</div>
+<div class="frame">
+  <div class="dir-c">
+    <div class="nav">
+      <div>RM©2026</div>
+      <div class="links"><span>ABOUT</span><span>JOURNEY</span><span>WORK</span><span>CONTACT</span></div>
+    </div>
+    <div class="hero">
+      <div class="blob"></div>
+      <div class="blob2"></div>
+      <div class="bigtype">Rajit<br><span class="outline">Mukhopadhyay</span></div>
+      <div class="meta">
+        <div><b>Currently</b>SDE @ Amazon Web Services</div>
+        <div><b>Previously</b>BAE · Northrop · JHU APL</div>
+        <div><b>Builds</b>Distributed systems → combat robots</div>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="ph">img / demo slot</div>
+        <h4>Multi-Region Replication</h4>
+        <p>Live customer data replication across AWS regions.</p>
+        <span class="tag">ENGINEERING</span>
+      </div>
+      <div class="card">
+        <div class="ph">img / demo slot</div>
+        <h4>Combat Robotics</h4>
+        <p>Leatherbacks team — designing bots that survive the arena.</p>
+        <span class="tag">HARDWARE</span>
+      </div>
+      <div class="card">
+        <div class="ph">img / demo slot</div>
+        <h4>ECHO Hearing ML</h4>
+        <p>Adaptive hearing aid research with a 10-person interdisciplinary team.</p>
+        <span class="tag">RESEARCH</span>
+      </div>
+    </div>
+  </div>
+</div>
+<p class="note">Feels like: a designer-engineer hybrid with personality. Heavy type, hard borders, primary-color pops. Transitions would be snappy — marquees, hover color-flips, elements that slide in with momentum.</p>
+
+<div class="intro" style="padding-bottom: 64px;">
+  <p><b>Tell me in the chat:</b> A, B, or C — or describe a blend. We'll iterate on the winner before locking anything in.</p>
+</div>
+
+</body>
+</html>

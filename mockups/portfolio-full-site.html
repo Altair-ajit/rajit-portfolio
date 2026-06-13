@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rajit Mukhopadhyay — full site mockup</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', -apple-system, sans-serif; background: #07070f; color: #fff; overflow-x: hidden; }
+  ::selection { background: rgba(94,234,212,0.35); }
+
+  /* ---------- boot overlay ---------- */
+  #bootveil { position: fixed; inset: 0; z-index: 1000; background: #050505; display: flex; align-items: center; justify-content: center; transition: opacity 1.1s ease, visibility 1.1s; }
+  #bootveil.done { opacity: 0; visibility: hidden; }
+  #bootveil .term { font-family: 'Cascadia Code', 'Consolas', monospace; font-size: 15px; line-height: 2; color: #d8ffd8; width: min(560px, 88vw); }
+  #bootveil .ok { color: #51ff9e; }
+  #bootveil .cursor { display: inline-block; width: 9px; height: 17px; background: #51ff9e; vertical-align: middle; animation: blink .9s step-end infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  #skipboot { position: fixed; bottom: 20px; right: 24px; z-index: 1001; font-size: 12px; color: #3a5a3a; cursor: pointer; font-family: 'Consolas', monospace; }
+
+  /* ---------- aurora ---------- */
+  .aurora-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.5; }
+  .b1 { width: 620px; height: 620px; background: #3b2bee; top: -160px; left: -120px; animation: drift1 16s ease-in-out infinite alternate; }
+  .b2 { width: 520px; height: 520px; background: #b22bee; bottom: -200px; right: -100px; animation: drift2 19s ease-in-out infinite alternate; }
+  .b3 { width: 400px; height: 400px; background: #2bc8ee; top: 45%; left: 60%; animation: drift3 13s ease-in-out infinite alternate; }
+  @keyframes drift1 { to { transform: translate(170px, 120px) scale(1.2); } }
+  @keyframes drift2 { to { transform: translate(-150px, -100px) scale(0.92); } }
+  @keyframes drift3 { to { transform: translate(-190px, 70px) scale(1.3); } }
+
+  main { position: relative; z-index: 1; }
+
+  /* ---------- nav ---------- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 32px; transform: translateY(-110%); transition: transform .5s ease, background .3s;
+    background: rgba(7,7,15,0.72); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  nav.show { transform: none; }
+  nav .logo { font-family: 'Consolas', monospace; font-size: 14px; color: #5eead4; }
+  nav .links { display: flex; gap: 26px; font-size: 13.5px; }
+  nav .links a { color: rgba(255,255,255,0.65); text-decoration: none; transition: color .2s; }
+  nav .links a:hover { color: #5eead4; }
+
+  /* ---------- hero ---------- */
+  #hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; position: relative; }
+  #hero .kicker { color: rgba(255,255,255,0.5); letter-spacing: 5px; text-transform: uppercase; font-size: 13px; margin-bottom: 26px; opacity: 0; }
+  #hero h1 { font-size: clamp(52px, 9vw, 116px); font-weight: 800; letter-spacing: -3px; line-height: 0.98; }
+  #hero h1 .ltr { display: inline-block; opacity: 0; transform: translateY(60px) rotate(6deg); }
+  #hero h1 .ltr.go { animation: ltrIn .7s cubic-bezier(.2,.9,.3,1.2) forwards; }
+  @keyframes ltrIn { to { opacity: 1; transform: none; } }
+  #hero .kicker.go { animation: fadeUp 1s forwards; }
+  #hero .sub { margin-top: 28px; font-size: 19px; color: rgba(255,255,255,0.7); opacity: 0; }
+  #hero .sub.go { animation: fadeUp 1s .3s forwards; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+  #hero .cues { position: absolute; bottom: 30px; display: flex; gap: 32px; font-size: 13px; }
+  #hero .cues .read { color: rgba(255,255,255,0.45); animation: bob 2s ease-in-out infinite; }
+  #hero .cues a { color: rgba(94,234,212,0.8); text-decoration: none; }
+  @keyframes bob { 50% { transform: translateY(8px); } }
+
+  /* ---------- story ---------- */
+  .story { position: relative; max-width: 1060px; margin: 0 auto; padding: 60px 24px 40px; }
+  .spine { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; transform: translateX(-50%); background: rgba(255,255,255,0.07); }
+  .spine .fill { position: absolute; top: 0; left: 0; width: 100%; height: 0%; background: linear-gradient(180deg, #5eead4, #9fb4ff, #d8b4fe); box-shadow: 0 0 12px rgba(159,180,255,0.6); }
+  .chapter { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; padding: 110px 0; }
+  .chapter .copy { opacity: 0; transform: translateY(50px); transition: opacity .8s ease, transform .8s ease; }
+  .chapter .visual { opacity: 0; transform: translateY(50px) scale(.96); transition: opacity .8s .15s ease, transform .8s .15s ease; }
+  .chapter.on .copy, .chapter.on .visual { opacity: 1; transform: none; }
+  .chapter:nth-of-type(even) .copy { order: 2; }
+  .chapter:nth-of-type(even) .visual { order: 1; }
+  .chapter .act { font-family: 'Consolas', monospace; font-size: 13px; color: #5eead4; letter-spacing: 2px; margin-bottom: 14px; }
+  .chapter h2 { font-size: 38px; font-weight: 750; letter-spacing: -1px; margin-bottom: 16px; line-height: 1.15; }
+  .chapter p { color: rgba(255,255,255,0.65); line-height: 1.7; font-size: 16px; }
+  .chapter .meta { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .pill { font-size: 12px; font-family: 'Consolas', monospace; padding: 5px 13px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.7); }
+  .vcard { border-radius: 16px; padding: 22px; min-height: 240px; background: rgba(255,255,255,0.055); border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(14px); display: flex; flex-direction: column; justify-content: flex-end; position: relative; overflow: hidden; }
+  .vcard .ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.25); font-size: 13px; font-family: 'Consolas', monospace; }
+  .vcard .cap { position: relative; font-size: 13px; color: rgba(255,255,255,0.55); }
+
+  /* ---------- marquee ---------- */
+  .marquee { overflow: hidden; border-top: 1px solid rgba(255,255,255,0.14); border-bottom: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.04); backdrop-filter: blur(8px); margin: 40px 0 0; }
+  .marquee-inner { display: flex; white-space: nowrap; gap: 56px; padding: 16px 0; font-size: 14px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.65); animation: scrollX 22s linear infinite; }
+  @keyframes scrollX { to { transform: translateX(-50%); } }
+  .marquee b { color: #5eead4; font-weight: 600; }
+
+  /* ---------- normal-mode sections ---------- */
+  .site { background: linear-gradient(180deg, rgba(7,7,15,0) 0%, rgba(7,7,15,0.88) 6%, rgba(9,9,18,0.94) 100%); }
+  .section { max-width: 1060px; margin: 0 auto; padding: 110px 24px 30px; }
+  .section > .shead { display: flex; align-items: baseline; gap: 18px; margin-bottom: 36px; }
+  .section .shead h2 { font-size: 30px; font-weight: 750; letter-spacing: -0.5px; }
+  .section .shead .idx { font-family: 'Consolas', monospace; color: #5eead4; font-size: 14px; }
+  .section .shead .line { flex: 1; height: 1px; background: rgba(255,255,255,0.12); }
+  .reveal { opacity: 0; transform: translateY(36px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.on { opacity: 1; transform: none; }
+
+  /* projects */
+  .pgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .proj { border-radius: 14px; overflow: hidden; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.11); transition: transform .25s ease, border-color .25s, box-shadow .25s; cursor: pointer; }
+  .proj:hover { transform: translateY(-6px); border-color: rgba(94,234,212,0.45); box-shadow: 0 18px 44px rgba(0,0,0,0.45); }
+  .proj .pimg { height: 130px; background: linear-gradient(135deg, rgba(94,234,212,0.13), rgba(159,180,255,0.13)); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.3); font-size: 12px; font-family: 'Consolas', monospace; position: relative; }
+  .proj .pimg .live { position: absolute; top: 10px; right: 10px; font-size: 10px; letter-spacing: 1px; padding: 4px 10px; border-radius: 99px; background: rgba(94,234,212,0.15); color: #5eead4; border: 1px solid rgba(94,234,212,0.35); }
+  .proj .pbody { padding: 16px 18px 18px; }
+  .proj h4 { font-size: 16px; margin-bottom: 6px; }
+  .proj p { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.55; }
+  .proj .ptags { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .proj .ptags span { font-size: 10.5px; font-family: 'Consolas', monospace; color: #9fb4ff; }
+
+  /* company logos */
+  .clogo { width: 24px; height: 24px; border-radius: 6px; background: #fff; padding: 2px; object-fit: contain; vertical-align: -5px; margin-right: 10px; }
+  .clogo.sm { width: 18px; height: 18px; vertical-align: -4px; margin-right: 6px; }
+
+  /* experience */
+  .xlist { display: flex; flex-direction: column; }
+  .xrow { display: grid; grid-template-columns: 170px 1fr auto; gap: 24px; padding: 22px 8px; border-bottom: 1px solid rgba(255,255,255,0.08); align-items: baseline; transition: background .2s; border-radius: 8px; }
+  .xrow:hover { background: rgba(255,255,255,0.04); }
+  .xrow .when { font-family: 'Consolas', monospace; font-size: 12.5px; color: rgba(255,255,255,0.45); }
+  .xrow h4 { font-size: 16.5px; font-weight: 650; }
+  .xrow .org { color: #5eead4; font-weight: 400; }
+  .xrow p { font-size: 13.5px; color: rgba(255,255,255,0.55); margin-top: 5px; line-height: 1.55; max-width: 640px; }
+  .xrow .where { font-size: 12px; color: rgba(255,255,255,0.35); }
+
+  /* clients */
+  .clientgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 26px; }
+  .client { border-radius: 14px; padding: 22px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.11); }
+  .client h4 { font-size: 17px; margin-bottom: 8px; }
+  .client .role { font-size: 11.5px; font-family: 'Consolas', monospace; color: #5eead4; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+  .client p { font-size: 13.5px; color: rgba(255,255,255,0.6); line-height: 1.6; }
+  .advised { border-radius: 14px; padding: 20px 22px; background: rgba(159,180,255,0.06); border: 1px dashed rgba(159,180,255,0.3); font-size: 13.5px; color: rgba(255,255,255,0.65); line-height: 1.7; }
+  .advised b { color: #9fb4ff; }
+
+  /* publications & awards */
+  .pubgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 30px; }
+  .pub { border-radius: 14px; padding: 22px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.11); }
+  .pub .venue { font-size: 11.5px; font-family: 'Consolas', monospace; color: #d8b4fe; letter-spacing: 1px; margin-bottom: 10px; }
+  .pub h4 { font-size: 16px; line-height: 1.4; margin-bottom: 8px; }
+  .pub p { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.55; }
+  .awards { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  /* contact */
+  #contact { text-align: center; padding-bottom: 90px; }
+  #contact h2 { font-size: clamp(34px, 5vw, 54px); font-weight: 800; letter-spacing: -1px; }
+  #contact h2 .grad { background: linear-gradient(90deg, #5eead4, #9fb4ff, #d8b4fe); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  #contact p { margin-top: 16px; color: rgba(255,255,255,0.6); max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+  #contact .btns { margin-top: 32px; display: flex; gap: 14px; justify-content: center; }
+  #contact .btn { padding: 13px 28px; border-radius: 99px; font-size: 14.5px; text-decoration: none; transition: transform .2s; }
+  #contact .btn:hover { transform: translateY(-3px); }
+  #contact .btn.primary { background: linear-gradient(90deg, #5eead4, #9fb4ff); color: #07070f; font-weight: 650; }
+  #contact .btn.ghost { border: 1px solid rgba(255,255,255,0.25); color: #fff; }
+
+  footer { position: relative; z-index: 1; text-align: center; padding: 26px; font-size: 12.5px; color: rgba(255,255,255,0.35); border-top: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.5); font-family: 'Consolas', monospace; }
+
+  .endnote { position: relative; z-index: 1; background: #0a0a14; color: #888; text-align: center; padding: 30px 24px 60px; font-size: 13.5px; line-height: 1.8; }
+  .endnote b { color: #fff; }
+
+  @media (max-width: 860px) {
+    .pgrid, .clientgrid { grid-template-columns: 1fr; }
+    .pubgrid { grid-template-columns: 1fr; }
+    .chapter { grid-template-columns: 1fr; gap: 24px; padding: 70px 0; }
+    .chapter:nth-of-type(even) .copy { order: 1; }
+    .chapter:nth-of-type(even) .visual { order: 2; }
+    .spine { left: 8px; }
+    .xrow { grid-template-columns: 1fr; gap: 4px; }
+    nav .links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="bootveil">
+  <div class="term" id="bootterm"><span class="cursor"></span></div>
+</div>
+<div id="skipboot">[ skip intro ]</div>
+
+<div class="aurora-bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<nav id="topnav">
+  <div class="logo">rajit@portfolio:~</div>
+  <div class="links">
+    <a href="#hero">Story</a>
+    <a href="#projects">Projects</a>
+    <a href="#experience">Experience</a>
+    <a href="#clients">Clients</a>
+    <a href="#publications">Research</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<main>
+  <!-- ============ COVER / HOOK ============ -->
+  <section id="hero">
+    <div class="kicker" id="kick">Turning Problems into Products</div>
+    <h1 id="cascade">Rajit Mukhopadhyay</h1>
+    <div class="sub" id="sub">There's nothing better than a good story. Scroll to read mine.</div>
+    <div class="cues">
+      <span class="read">↓ read the story</span>
+      <a href="#projects">skip to the work →</a>
+    </div>
+  </section>
+
+  <div class="story">
+    <div class="spine"><div class="fill" id="spinefill"></div></div>
+
+    <div class="chapter">
+      <div class="copy">
+        <div class="act">CHAPTER 1 — SIGNALS IN THE NOISE</div>
+        <h2>It started with quantum noise.</h2>
+        <p>At 18, I was at JHU's Applied Physics Laboratory simulating quantum sensing protocols — learning that the hardest problems are the ones where the signal hides inside the noise. Two publications later, I was hooked on building things that didn't exist yet.</p>
+        <div class="meta"><span class="pill">JHU APL · Quantum Group</span><span class="pill">APS 2021</span><span class="pill">SPIE 2020</span></div>
+      </div>
+      <div class="visual"><div class="vcard"><div class="ph">[ photo: lab / quantum circuit viz ]</div><div class="cap">Spin-locking noise mitigation, IBM Quantum Experience</div></div></div>
+    </div>
+
+    <div class="chapter">
+      <div class="copy">
+        <div class="act">CHAPTER 2 — SYSTEMS AT SCALE</div>
+        <h2>Then I learned how big systems really work.</h2>
+        <p>Summers at Northrop Grumman automating integration pipelines. Then AWS — first building passkey authentication for Amazon Cognito as an intern, now shipping multi-region replication for live customer data as an SDE. Systems millions of people quietly depend on.</p>
+        <div class="meta"><span class="pill">AWS · SDE</span><span class="pill">Northrop Grumman</span><span class="pill">distributed systems</span></div>
+      </div>
+      <div class="visual"><div class="vcard"><div class="ph">[ diagram: multi-region replication / live demo slot ]</div><div class="cap">Replication orchestration across AWS regions</div></div></div>
+    </div>
+
+    <div class="chapter">
+      <div class="copy">
+        <div class="act">CHAPTER 3 — THE BIGGER PICTURE</div>
+        <h2>And that building alone isn't enough.</h2>
+        <p>Consulting taught me the other half of the story: an LLM risk tool for BAE Systems that prevented $1M+ in losses, market strategy for AlgenAir, leading 500 students as Gemstone president, and advising 18 capstone teams on projects for Meta, Fannie Mae, and Lockheed Martin.</p>
+        <div class="meta"><span class="pill">BAE Systems</span><span class="pill">AlgenAir</span><span class="pill">Gemstone President</span></div>
+      </div>
+      <div class="visual"><div class="vcard"><div class="ph">[ photo: presenting / team ]</div><div class="cap">Client work & leadership</div></div></div>
+    </div>
+  </div>
+
+  <div class="marquee"><div class="marquee-inner" id="marq"></div></div>
+
+  <!-- ============ NORMAL SITE MODE ============ -->
+  <div class="site">
+
+    <section class="section" id="projects">
+      <div class="shead reveal"><span class="idx">01</span><h2>Projects</h2><div class="line"></div></div>
+      <div class="pgrid">
+        <div class="proj reveal">
+          <div class="pimg">[ architecture diagram ]<span class="live">demo slot</span></div>
+          <div class="pbody"><h4>Multi-Region Replication</h4><p>Replication orchestration for live customer data across AWS regions, with enterprise security controls.</p><div class="ptags"><span>java</span><span>typescript</span><span>distributed</span></div></div>
+        </div>
+        <div class="proj reveal">
+          <div class="pimg">[ flow mockup ]<span class="live">demo slot</span></div>
+          <div class="pbody"><h4>Cognito Native Auth</h4><p>New authentication flow bringing TouchID / FaceID passkeys to Amazon Cognito, intern-to-launch.</p><div class="ptags"><span>auth</span><span>java</span><span>flutter</span></div></div>
+        </div>
+        <div class="proj reveal">
+          <div class="pimg">[ risk dashboard shot ]<span class="live">demo slot</span></div>
+          <div class="pbody"><h4>LLM Risk Tool</h4><p>Llama3-powered feature analysis and risk detection for enterprise IT tickets at BAE Systems.</p><div class="ptags"><span>llm</span><span>python</span><span>consulting</span></div></div>
+        </div>
+        <div class="proj reveal">
+          <div class="pimg">[ waveform viz ]<span class="live">demo slot</span></div>
+          <div class="pbody"><h4>ECHO — Hearing Aid ML</h4><p>Led 9-person team to a published thesis: open-source environmental audio dataset + model benchmarking platform for adaptive hearing aids.</p><div class="ptags"><span>ml</span><span>python</span><span>published 2025</span></div></div>
+        </div>
+        <div class="proj reveal">
+          <div class="pimg">[ chart placeholder ]</div>
+          <div class="pbody"><h4>AlgenAir Market Analytics</h4><p>Sales-data analysis in Python that surfaced new consumer segments for a sustainability startup.</p><div class="ptags"><span>data</span><span>python</span><span>strategy</span></div></div>
+        </div>
+        <div class="proj reveal">
+          <div class="pimg">[ quantum circuit ]</div>
+          <div class="pbody"><h4>Quantum Sensing Sims</h4><p>Optimized-control quantum sensing simulations on IBM Q — published at APS March Meeting 2021.</p><div class="ptags"><span>quantum</span><span>research</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="experience">
+      <div class="shead reveal"><span class="idx">02</span><h2>Experience</h2><div class="line"></div></div>
+      <div class="xlist">
+        <div class="xrow reveal">
+          <div class="when">2025 — now</div>
+          <div><h4><img class="clogo" src="https://www.google.com/s2/favicons?domain=aws.amazon.com&sz=64" alt="">Software Development Engineer · <span class="org">Amazon Web Services</span></h4><p>Multi-region replication for a distributed Java backend and TypeScript control plane.</p></div>
+          <div class="where">Seattle, WA</div>
+        </div>
+        <div class="xrow reveal">
+          <div class="when">2024</div>
+          <div><h4><img class="clogo" src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" alt="">SDE Intern, Amazon Cognito · <span class="org">Amazon Web Services</span></h4><p>Native passkey auth flows (TouchID/FaceID); new AWS endpoint + integration testing tool.</p></div>
+          <div class="where">Seattle, WA</div>
+        </div>
+        <div class="xrow reveal">
+          <div class="when">2024 — 2025</div>
+          <div><h4><img class="clogo" src="https://www.google.com/s2/favicons?domain=umd.edu&sz=64" alt="">Capstone Consulting Advisor · <span class="org">QUEST Honors, UMD</span></h4><p>Advised 18 teams on corporate consulting projects; strategy, ops efficiency, digital transformation.</p></div>
+          <div class="where">College Park, MD</div>
+        </div>
+        <div class="xrow reveal">
+          <div class="when">2023</div>
+          <div><h4><img class="clogo" src="https://www.google.com/s2/favicons?domain=northropgrumman.com&sz=64" alt="">Integration & Test Engineer Intern · <span class="org">Northrop Grumman</span></h4><p>CI tooling in Python/C/MATLAB; major runtime and accuracy improvements across programs.</p></div>
+          <div class="where">Baltimore, MD</div>
+        </div>
+        <div class="xrow reveal">
+          <div class="when">2022 — 2025</div>
+          <div><h4><img class="clogo" src="https://www.google.com/s2/favicons?domain=umd.edu&sz=64" alt="">President, Gemstone Honors · <span class="org">University of Maryland</span></h4><p>Led student operations for a 500-person research honors college; ECHO research team lead.</p></div>
+          <div class="where">College Park, MD</div>
+        </div>
+        <div class="xrow reveal">
+          <div class="when">2020 — 2021</div>
+          <div><h4><img class="clogo" src="https://www.google.com/s2/favicons?domain=jhuapl.edu&sz=64" alt="">Feasibility Research Intern · <span class="org">JHU Applied Physics Lab</span></h4><p>Quantum sensing + spin-locking noise mitigation on IBM Quantum Experience.</p></div>
+          <div class="where">Laurel, MD</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="clients">
+      <div class="shead reveal"><span class="idx">03</span><h2>Clients I've worked with</h2><div class="line"></div></div>
+      <div class="clientgrid">
+        <div class="client reveal"><div class="role">Technical Consulting</div><h4><img class="clogo" src="https://www.google.com/s2/favicons?domain=baesystems.com&sz=64" alt="">BAE Systems</h4><p>Redesigned enterprise IT change management; built an LLM risk tool preventing $1M+ in losses.</p></div>
+        <div class="client reveal"><div class="role">Data & Marketing</div><h4><img class="clogo" src="https://www.google.com/s2/favicons?domain=algenair.com&sz=64" alt="">AlgenAir</h4><p>Python analysis of large-scale sales data; surfaced untapped consumer segments that improved sales.</p></div>
+        <div class="client reveal"><div class="role">Process Consulting</div><h4><img class="clogo" src="https://www.google.com/s2/favicons?domain=rhsmith.umd.edu&sz=64" alt="">Smith School of Business</h4><p>Digitized the events-planning workflow for the Office of Programs and Events.</p></div>
+      </div>
+      <div class="advised reveal"><b>Advised capstone projects for:</b>
+        <span style="white-space:nowrap"><img class="clogo sm" src="https://www.google.com/s2/favicons?domain=meta.com&sz=64" alt="">Meta</span> ·
+        <span style="white-space:nowrap"><img class="clogo sm" src="https://www.google.com/s2/favicons?domain=fanniemae.com&sz=64" alt="">Fannie Mae</span> ·
+        <span style="white-space:nowrap"><img class="clogo sm" src="https://www.google.com/s2/favicons?domain=lockheedmartin.com&sz=64" alt="">Lockheed Martin</span> ·
+        <span style="white-space:nowrap"><img class="clogo sm" src="https://www.google.com/s2/favicons?domain=mccormick.com&sz=64" alt="">McCormick</span> ·
+        <span style="white-space:nowrap"><img class="clogo sm" src="https://www.google.com/s2/favicons?domain=thalesgroup.com&sz=64" alt="">Thales</span> ·
+        <span style="white-space:nowrap">Capital I</span> ·
+        <span style="white-space:nowrap"><img class="clogo sm" src="https://www.google.com/s2/favicons?domain=intralox.com&sz=64" alt="">Intralox</span> ·
+        <span style="white-space:nowrap"><img class="clogo sm" src="https://www.google.com/s2/favicons?domain=tronox.com&sz=64" alt="">Tronox</span> ·
+        <span style="white-space:nowrap"><img class="clogo sm" src="https://www.google.com/s2/favicons?domain=dandh.com&sz=64" alt="">D&H Distributing</span> ·
+        <span style="white-space:nowrap"><img class="clogo sm" src="https://www.google.com/s2/favicons?domain=bunge.com&sz=64" alt="">Bunge</span> ·
+        and more — as QUEST Capstone consulting advisor.</div>
+    </section>
+
+    <section class="section" id="publications">
+      <div class="shead reveal"><span class="idx">04</span><h2>Research & Awards</h2><div class="line"></div></div>
+      <div class="pubgrid">
+        <div class="pub reveal"><div class="venue">GEMSTONE THESIS · UMD DRUM · 2025</div><h4>Hearing Aid Audio Processing Model Benchmarking with Binary Environmental Classification</h4><p>Team ECHO (first author) — open-source environmental audio dataset + benchmarking platform across six audio metrics. Advised by Prof. Sahil Shah.</p></div>
+        <div class="pub reveal"><div class="venue">APS MARCH MEETING · 2021</div><h4>Quantum Sensing Simulation on Quantum Computers using Optimized Control</h4><p>With JHU APL's Quantum Group — co-author on optimized-control sensing simulations.</p></div>
+        <div class="pub reveal"><div class="venue">SPIE OPTICAL ENG. · 2020</div><h4>SIRVLAS: Space-based Ionosonde Receiver & Airglow Sensor</h4><p>CubeSats and SmallSats for Remote Sensing IV — instrument concept publication.</p></div>
+      </div>
+      <div class="awards reveal">
+        <span class="pill">UMD President's Scholarship</span>
+        <span class="pill">National Merit Finalist</span>
+        <span class="pill">US President's Award for Educational Excellence</span>
+        <span class="pill">2nd Place / Best IoT Hack — Disrupt DC</span>
+        <span class="pill">Founder — BlairHacks</span>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <h2 class="reveal">Every good story needs a <span class="grad">next chapter</span>.</h2>
+      <p class="reveal">I'm always up for talking distributed systems, product strategy, or whatever you're building. Let's write it together.</p>
+      <div class="btns reveal">
+        <a class="btn primary" href="mailto:rajitzp@gmail.com">Say hello</a>
+        <a class="btn ghost" href="https://www.linkedin.com/in/rajit-mukhopadhyay-67737a19a/" target="_blank">LinkedIn</a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>~ built with a story to tell · rajit mukhopadhyay © 2026 ~</footer>
+
+<div class="endnote">
+  <b>Full-site mockup:</b> boot → story cover (3 chapters) → marquee → normal traversal (nav bar appears once you pass the story; projects / experience / clients / research / contact).<br>
+  Refresh to replay the intro. Tell me what to change — copy, order, pacing, sections.
+</div>
+
+<script>
+  // ---- boot ----
+  const bootLines = [
+    '> boot rajit.dev',
+    '  experience .... <span class="ok">OK</span>',
+    '  clients ....... <span class="ok">OK</span>',
+    '  story ......... <span class="ok">OK</span>',
+    '> tell --from-the-beginning',
+  ];
+  const term = document.getElementById('bootterm');
+  const veil = document.getElementById('bootveil');
+  let bootDone = false;
+  function finishBoot() {
+    if (bootDone) return;
+    bootDone = true;
+    veil.classList.add('done');
+    document.getElementById('skipboot').style.display = 'none';
+    startHero();
+  }
+  document.getElementById('skipboot').onclick = finishBoot;
+  function typeBootLine(idx) {
+    if (bootDone) return;
+    if (idx >= bootLines.length) { setTimeout(finishBoot, 550); return; }
+    const html = bootLines[idx];
+    const div = document.createElement('div');
+    term.insertBefore(div, term.lastChild);
+    const plain = html.replace(/<[^>]+>/g, '');
+    let i = 0;
+    const t = setInterval(() => {
+      i++;
+      div.textContent = plain.slice(0, i);
+      if (i >= plain.length) {
+        clearInterval(t);
+        div.innerHTML = html;
+        setTimeout(() => typeBootLine(idx + 1), 160);
+      }
+    }, 14);
+  }
+  setTimeout(() => typeBootLine(0), 350);
+
+  // ---- hero entrance ----
+  function startHero() {
+    document.getElementById('kick').classList.add('go');
+    document.getElementById('sub').classList.add('go');
+    document.querySelectorAll('#cascade .ltr').forEach((s, i) => {
+      s.style.animationDelay = (0.15 + i * 0.04) + 's';
+      s.classList.add('go');
+    });
+  }
+  (function () {
+    const h = document.getElementById('cascade');
+    const text = h.textContent;
+    h.textContent = '';
+    [...text].forEach((ch) => {
+      const s = document.createElement('span');
+      s.className = 'ltr';
+      s.innerHTML = ch === ' ' ? '&nbsp;' : ch;
+      h.appendChild(s);
+    });
+  })();
+
+  // ---- nav appears after hero ----
+  const nav = document.getElementById('topnav');
+  const heroObs = new IntersectionObserver((es) => {
+    nav.classList.toggle('show', !es[0].isIntersecting);
+  }, { threshold: 0.15 });
+  heroObs.observe(document.getElementById('hero'));
+
+  // ---- chapter + reveal observers ----
+  const chObs = new IntersectionObserver((es) => {
+    es.forEach((e) => { if (e.isIntersecting) e.target.classList.add('on'); });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.chapter').forEach((c) => chObs.observe(c));
+  const rvObs = new IntersectionObserver((es) => {
+    es.forEach((e) => { if (e.isIntersecting) e.target.classList.add('on'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach((el) => rvObs.observe(el));
+
+  // ---- spine ----
+  const story = document.querySelector('.story');
+  const fill = document.getElementById('spinefill');
+  function updateSpine() {
+    const r = story.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const progress = Math.min(1, Math.max(0, (vh * 0.7 - r.top) / r.height));
+    fill.style.height = (progress * 100) + '%';
+  }
+  document.addEventListener('scroll', updateSpine, { passive: true });
+  updateSpine();
+
+  // ---- marquee ----
+  (function () {
+    const items = 'AWS &nbsp;·&nbsp; NORTHROP GRUMMAN &nbsp;·&nbsp; JHU APL &nbsp;·&nbsp; UMD &nbsp;·&nbsp; <b>BAE SYSTEMS</b> &nbsp;·&nbsp; <b>ALGENAIR</b> &nbsp;·&nbsp; <b>SMITH SCHOOL</b> &nbsp;·&nbsp; ADVISED: META · FANNIE MAE · LOCKHEED MARTIN &nbsp;·&nbsp; ';
+    document.getElementById('marq').innerHTML = items + items;
+  })();
+</script>
+</body>
+</html>

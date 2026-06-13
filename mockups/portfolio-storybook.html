@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rajit Mukhopadhyay — storybook theme</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  :root {
+    --paper: #f8f4ea;
+    --paper2: #f2ecdd;
+    --ink: #2e2c38;
+    --ink-soft: #5c5868;
+    --ink-faint: #8d8898;
+    --peri: #7c89c4;      /* periwinkle */
+    --peri-deep: #56619c; /* deep hydrangea blue */
+    --lav: #a48bc9;       /* lavender */
+    --pink: #c98ba6;      /* dusty pink */
+    --sage: #7d9a72;      /* leaf green */
+    --line: rgba(46,44,56,0.14);
+  }
+  body {
+    font-family: Georgia, 'Times New Roman', serif; color: var(--ink); overflow-x: hidden;
+    background:
+      linear-gradient(rgba(124,137,196,0.11) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,137,196,0.11) 1px, transparent 1px),
+      linear-gradient(rgba(124,137,196,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,137,196,0.05) 1px, transparent 1px),
+      var(--paper);
+    background-size: 130px 130px, 130px 130px, 26px 26px, 26px 26px, auto;
+  }
+  ::selection { background: rgba(124,137,196,0.3); }
+
+  /* paper grain */
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: 3; pointer-events: none; opacity: 0.5;
+    background-image: radial-gradient(rgba(46,44,56,0.045) 1px, transparent 1px);
+    background-size: 4px 4px;
+  }
+
+  /* ---------- boot veil: typewriter frontispiece ---------- */
+  #bootveil { position: fixed; inset: 0; z-index: 1000; background: var(--paper); display: flex; align-items: center; justify-content: center; transition: opacity 1.2s ease, visibility 1.2s; }
+  #bootveil.done { opacity: 0; visibility: hidden; }
+  #bootveil .frontis { text-align: center; font-size: clamp(17px, 2.4vw, 23px); line-height: 2.3; color: var(--ink); width: min(640px, 90vw); font-style: italic; }
+  #bootveil .frontis .small { font-size: 0.72em; color: var(--ink-soft); letter-spacing: 2px; }
+  #bootveil .cursor { display: inline-block; width: 2px; height: 1.1em; background: var(--peri-deep); vertical-align: -3px; animation: blink .9s step-end infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  #skipboot { position: fixed; bottom: 20px; right: 24px; z-index: 1001; font-size: 12px; color: var(--ink-faint); cursor: pointer; font-style: italic; }
+
+  /* ---------- watercolor hydrangea washes ---------- */
+  .wash-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .wash { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.34; }
+  .w1 { width: 640px; height: 640px; background: var(--peri); top: -180px; left: -140px; animation: drift1 18s ease-in-out infinite alternate; }
+  .w2 { width: 540px; height: 540px; background: var(--pink); bottom: -220px; right: -120px; animation: drift2 21s ease-in-out infinite alternate; }
+  .w3 { width: 420px; height: 420px; background: var(--lav); top: 44%; left: 58%; animation: drift3 15s ease-in-out infinite alternate; }
+  .w4 { width: 320px; height: 320px; background: var(--sage); top: 12%; right: 6%; animation: drift2 24s ease-in-out infinite alternate; opacity: 0.2; }
+  @keyframes drift1 { to { transform: translate(160px, 110px) scale(1.18); } }
+  @keyframes drift2 { to { transform: translate(-140px, -90px) scale(0.92); } }
+  @keyframes drift3 { to { transform: translate(-180px, 60px) scale(1.26); } }
+
+  main { position: relative; z-index: 1; }
+
+  /* ---------- nav ---------- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 13px 32px; transform: translateY(-110%); transition: transform .5s ease;
+    background: rgba(248,244,234,0.88); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line);
+  }
+  nav.show { transform: none; }
+  nav .logo { font-style: italic; font-size: 16px; color: var(--peri-deep); }
+  nav .links { display: flex; gap: 28px; font-size: 13px; font-family: 'Segoe UI', sans-serif; letter-spacing: 1.2px; text-transform: uppercase; }
+  nav .links a { color: var(--ink-soft); text-decoration: none; transition: color .2s; }
+  nav .links a:hover { color: var(--peri-deep); }
+
+  /* ---------- hero ---------- */
+  #hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; position: relative; }
+  #hero .kicker { color: var(--ink-soft); letter-spacing: 5px; text-transform: uppercase; font-size: 12.5px; margin-bottom: 30px; font-family: 'Segoe UI', sans-serif; opacity: 0; }
+  #hero h1 { font-size: clamp(48px, 8.4vw, 104px); font-weight: 500; letter-spacing: -1px; line-height: 1.02; color: var(--ink); }
+  #hero h1 .ltr { display: inline-block; opacity: 0; transform: translateY(50px) rotate(4deg); }
+  #hero h1 .ltr.go { animation: ltrIn .7s cubic-bezier(.2,.9,.3,1.15) forwards; }
+  @keyframes ltrIn { to { opacity: 1; transform: none; } }
+  #hero .kicker.go { animation: fadeUp 1s forwards; }
+  #hero .sub { margin-top: 30px; font-size: 19px; font-style: italic; color: var(--ink-soft); opacity: 0; }
+  #hero .sub.go { animation: fadeUp 1s .3s forwards; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  #hero .rule { width: 90px; height: 1px; background: var(--ink); opacity: 0; margin-top: 30px; }
+  #hero .rule.go { animation: fadeUp 1s .5s forwards; }
+  #hero .cues { position: absolute; bottom: 30px; display: flex; gap: 36px; font-size: 14px; font-style: italic; }
+  #hero .cues .read { color: var(--ink-faint); animation: bob 2s ease-in-out infinite; }
+  #hero .cues a { color: var(--peri-deep); text-decoration: none; }
+  @keyframes bob { 50% { transform: translateY(7px); } }
+
+  /* ---------- story ---------- */
+  .story { position: relative; max-width: 1060px; margin: 0 auto; padding: 60px 24px 40px; }
+  .spine { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; transform: translateX(-50%); background: rgba(46,44,56,0.08); }
+  .spine .fill { position: absolute; top: 0; left: 0; width: 100%; height: 0%; background: linear-gradient(180deg, var(--peri), var(--lav), var(--pink)); }
+  .chapter { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; padding: 110px 0; }
+  .chapter .copy { opacity: 0; transform: translateY(50px); transition: opacity .8s ease, transform .8s ease; }
+  .chapter .visual { opacity: 0; transform: translateY(50px) scale(.97); transition: opacity .8s .15s ease, transform .8s .15s ease; }
+  .chapter.on .copy, .chapter.on .visual { opacity: 1; transform: none; }
+  .chapter:nth-of-type(even) .copy { order: 2; }
+  .chapter:nth-of-type(even) .visual { order: 1; }
+  .chapter .act { font-style: italic; font-size: 16px; color: var(--peri-deep); margin-bottom: 14px; }
+  .chapter .act::before { content: '❀ '; color: var(--pink); font-style: normal; }
+  .chapter h2 { font-size: 38px; font-weight: 500; letter-spacing: -0.5px; margin-bottom: 16px; line-height: 1.18; }
+  .chapter p { color: var(--ink-soft); line-height: 1.75; font-size: 16.5px; }
+  .chapter .meta { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .pill { font-size: 12px; font-family: 'Segoe UI', sans-serif; padding: 5px 14px; border-radius: 99px; border: 1px solid rgba(86,97,156,0.35); color: var(--peri-deep); background: rgba(124,137,196,0.08); }
+  .vcard { border-radius: 6px; padding: 22px; min-height: 250px; background: #fffdf7; border: 1px solid var(--line); box-shadow: 0 14px 34px rgba(46,44,56,0.1); display: flex; flex-direction: column; justify-content: flex-end; position: relative; overflow: hidden; }
+  .vcard .ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--ink-faint); font-size: 13.5px; font-style: italic; background: linear-gradient(150deg, rgba(124,137,196,0.1), rgba(201,139,166,0.1)); }
+  .vcard .cap { position: relative; font-size: 13px; color: var(--ink-soft); font-style: italic; background: #fffdf7; padding-top: 8px; }
+
+  /* ---------- marquee (employers) ---------- */
+  .marquee { overflow: hidden; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); background: var(--paper2); margin: 40px 0 0; }
+  .marquee-inner { display: flex; white-space: nowrap; gap: 56px; padding: 15px 0; font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: var(--ink-soft); font-family: 'Segoe UI', sans-serif; animation: scrollX 22s linear infinite; }
+  @keyframes scrollX { to { transform: translateX(-50%); } }
+  .marquee b { color: var(--peri-deep); font-weight: 600; }
+
+  /* ---------- sections ---------- */
+  .site { background: linear-gradient(180deg, rgba(248,244,234,0) 0%, rgba(248,244,234,0.9) 6%, rgba(248,244,234,0.96) 100%); }
+  .section { max-width: 1060px; margin: 0 auto; padding: 110px 24px 30px; }
+  .section > .shead { display: flex; align-items: baseline; gap: 18px; margin-bottom: 38px; }
+  .section .shead h2 { font-size: 31px; font-weight: 500; letter-spacing: -0.3px; }
+  .section .shead .idx { font-style: italic; color: var(--pink); font-size: 17px; }
+  .section .shead .line { flex: 1; height: 1px; background: var(--line); }
+  .reveal { opacity: 0; transform: translateY(36px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.on { opacity: 1; transform: none; }
+
+  /* projects */
+  .pgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .proj { border-radius: 6px; overflow: hidden; background: #fffdf7; border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(46,44,56,0.06); transition: transform .25s ease, box-shadow .25s; cursor: pointer; }
+  .proj:hover { transform: translateY(-6px) rotate(-0.4deg); box-shadow: 0 20px 40px rgba(86,97,156,0.18); }
+  .proj .pimg { height: 130px; background: linear-gradient(135deg, rgba(124,137,196,0.16), rgba(201,139,166,0.16)); display: flex; align-items: center; justify-content: center; color: var(--ink-faint); font-size: 13px; font-style: italic; position: relative; }
+  .proj .pimg .live { position: absolute; top: 10px; right: 10px; font-size: 10px; letter-spacing: 1px; padding: 4px 10px; border-radius: 99px; background: rgba(125,154,114,0.14); color: var(--sage); border: 1px solid rgba(125,154,114,0.4); font-family: 'Segoe UI', sans-serif; font-style: normal; }
+  .proj .pbody { padding: 17px 18px 19px; }
+  .proj h4 { font-size: 17px; font-weight: 600; margin-bottom: 7px; }
+  .proj p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.6; font-family: 'Segoe UI', sans-serif; }
+  .proj .ptags { margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .proj .ptags span { font-size: 11px; font-style: italic; color: var(--peri-deep); }
+
+  /* experience */
+  .xlist { display: flex; flex-direction: column; }
+  .xrow { display: grid; grid-template-columns: 150px 1fr auto; gap: 24px; padding: 24px 10px; border-bottom: 1px solid var(--line); align-items: baseline; transition: background .2s; }
+  .xrow:hover { background: rgba(124,137,196,0.06); }
+  .xrow .when { font-style: italic; font-size: 14px; color: var(--ink-faint); }
+  .xrow h4 { font-size: 17.5px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+  .xrow .org { color: var(--peri-deep); font-weight: 400; font-style: italic; }
+  .xrow p { font-size: 13.5px; color: var(--ink-soft); margin-top: 6px; line-height: 1.6; max-width: 640px; font-family: 'Segoe UI', sans-serif; }
+  .xrow .where { font-size: 12.5px; color: var(--ink-faint); font-style: italic; }
+  .clogo { width: 26px; height: 26px; object-fit: contain; border-radius: 50%; filter: saturate(0.75); }
+
+  /* clients */
+  .clientgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 34px; }
+  .client { border-radius: 6px; padding: 24px; background: #fffdf7; border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(46,44,56,0.06); }
+  .client h4 { font-size: 18px; font-weight: 600; margin-bottom: 9px; display: flex; align-items: center; gap: 10px; }
+  .client .role { font-size: 11px; font-family: 'Segoe UI', sans-serif; color: var(--pink); letter-spacing: 1.6px; text-transform: uppercase; margin-bottom: 12px; }
+  .client p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.65; font-family: 'Segoe UI', sans-serif; }
+
+  /* sponsors-style capstone banner */
+  .sponsors { text-align: center; padding: 8px 0 6px; }
+  .sponsors .sp-label { font-style: italic; font-size: 15px; color: var(--ink-soft); margin-bottom: 20px; }
+  .sponsors .sp-label::before, .sponsors .sp-label::after { content: ' — '; color: var(--ink-faint); }
+  .sp-marquee { overflow: hidden; position: relative; }
+  .sp-marquee::before, .sp-marquee::after {
+    content: ''; position: absolute; top: 0; bottom: 0; width: 90px; z-index: 2; pointer-events: none;
+  }
+  .sp-marquee::before { left: 0; background: linear-gradient(90deg, var(--paper), transparent); }
+  .sp-marquee::after { right: 0; background: linear-gradient(270deg, var(--paper), transparent); }
+  .sp-track { display: flex; align-items: center; gap: 70px; white-space: nowrap; padding: 10px 0 14px; animation: scrollX 26s linear infinite; width: max-content; }
+  .sp-item { display: flex; align-items: center; gap: 10px; font-family: 'Segoe UI', sans-serif; font-size: 14px; color: var(--ink-soft); }
+  .sp-item img { width: 34px; height: 34px; object-fit: contain; border-radius: 50%; filter: grayscale(0.55) saturate(0.8); opacity: 0.85; transition: filter .25s, opacity .25s; }
+  .sp-item:hover img { filter: none; opacity: 1; }
+
+  /* publications & awards */
+  .pubgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 32px; }
+  .pub { border-radius: 6px; padding: 24px; background: #fffdf7; border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(46,44,56,0.06); }
+  .pub .venue { font-size: 11px; font-family: 'Segoe UI', sans-serif; color: var(--lav); letter-spacing: 1.6px; margin-bottom: 12px; text-transform: uppercase; }
+  .pub h4 { font-size: 16.5px; font-weight: 600; line-height: 1.45; margin-bottom: 9px; }
+  .pub p { font-size: 13px; color: var(--ink-soft); line-height: 1.6; font-family: 'Segoe UI', sans-serif; }
+  .awards { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  /* contact */
+  #contact { text-align: center; padding-bottom: 100px; }
+  #contact h2 { font-size: clamp(32px, 4.8vw, 52px); font-weight: 500; letter-spacing: -0.5px; }
+  #contact h2 em { color: var(--peri-deep); }
+  #contact p { margin-top: 18px; color: var(--ink-soft); max-width: 470px; margin-left: auto; margin-right: auto; line-height: 1.75; font-style: italic; }
+  #contact .btns { margin-top: 34px; display: flex; gap: 14px; justify-content: center; }
+  #contact .btn { padding: 13px 30px; border-radius: 99px; font-size: 14.5px; text-decoration: none; transition: transform .2s, box-shadow .2s; font-family: 'Segoe UI', sans-serif; }
+  #contact .btn:hover { transform: translateY(-3px); }
+  #contact .btn.primary { background: var(--peri-deep); color: var(--paper); box-shadow: 0 8px 22px rgba(86,97,156,0.35); }
+  #contact .btn.ghost { border: 1px solid var(--ink); color: var(--ink); }
+
+  footer { position: relative; z-index: 1; text-align: center; padding: 26px; font-size: 13px; color: var(--ink-faint); border-top: 1px solid var(--line); background: var(--paper2); font-style: italic; }
+
+  .endnote { position: relative; z-index: 1; background: #efe8d8; color: var(--ink-soft); text-align: center; padding: 30px 24px 60px; font-size: 13.5px; line-height: 1.8; font-family: 'Segoe UI', sans-serif; }
+  .endnote b { color: var(--ink); }
+
+  @media (max-width: 860px) {
+    .pgrid, .clientgrid, .pubgrid { grid-template-columns: 1fr; }
+    .chapter { grid-template-columns: 1fr; gap: 24px; padding: 70px 0; }
+    .chapter:nth-of-type(even) .copy { order: 1; }
+    .chapter:nth-of-type(even) .visual { order: 2; }
+    .spine { left: 8px; }
+    .xrow { grid-template-columns: 1fr; gap: 4px; }
+    nav .links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="bootveil">
+  <div class="frontis" id="frontis"><span class="cursor"></span></div>
+</div>
+<div id="skipboot">skip the opening →</div>
+
+<div class="wash-bg"><div class="wash w1"></div><div class="wash w2"></div><div class="wash w3"></div><div class="wash w4"></div></div>
+
+<nav id="topnav">
+  <div class="logo">Rajit Mukhopadhyay</div>
+  <div class="links">
+    <a href="#hero">Story</a>
+    <a href="#projects">Projects</a>
+    <a href="#experience">Experience</a>
+    <a href="#clients">Clients</a>
+    <a href="#publications">Research</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<main>
+  <section id="hero">
+    <div class="kicker" id="kick">Turning Problems into Products</div>
+    <h1 id="cascade">Rajit Mukhopadhyay</h1>
+    <div class="rule" id="rule"></div>
+    <div class="sub" id="sub">There's nothing better than a good story. Scroll to read mine.</div>
+    <div class="cues">
+      <span class="read">↓ read the story</span>
+      <a href="#projects">skip to the work →</a>
+    </div>
+  </section>
+
+  <div class="story">
+    <div class="spine"><div class="fill" id="spinefill"></div></div>
+
+    <div class="chapter">
+      <div class="copy">
+        <div class="act">Chapter One — Signals in the Noise</div>
+        <h2>It started with quantum noise.</h2>
+        <p>At 18, I was at JHU's Applied Physics Laboratory simulating quantum sensing protocols — learning that the hardest problems are the ones where the signal hides inside the noise. Two publications later, I was hooked on building things that didn't exist yet.</p>
+        <div class="meta"><span class="pill">JHU APL · Quantum Group</span><span class="pill">APS 2021</span><span class="pill">SPIE 2020</span></div>
+      </div>
+      <div class="visual"><div class="vcard"><div class="ph">photo: lab / quantum circuit illustration</div><div class="cap">Spin-locking noise mitigation, IBM Quantum Experience</div></div></div>
+    </div>
+
+    <div class="chapter">
+      <div class="copy">
+        <div class="act">Chapter Two — Systems at Scale</div>
+        <h2>Then I learned how big systems really work.</h2>
+        <p>Summers at Northrop Grumman automating integration pipelines. Then AWS — first building passkey authentication for Amazon Cognito as an intern, now shipping multi-region replication for live customer data as an SDE. Systems millions of people quietly depend on.</p>
+        <div class="meta"><span class="pill">AWS · SDE</span><span class="pill">Northrop Grumman</span><span class="pill">distributed systems</span></div>
+      </div>
+      <div class="visual"><div class="vcard"><div class="ph">diagram: multi-region replication / live demo slot</div><div class="cap">Replication orchestration across AWS regions</div></div></div>
+    </div>
+
+    <div class="chapter">
+      <div class="copy">
+        <div class="act">Chapter Three — The Bigger Picture</div>
+        <h2>And that building alone isn't enough.</h2>
+        <p>Consulting taught me the other half of the story: an LLM risk tool for BAE Systems that prevented $1M+ in losses, market strategy for AlgenAir, leading 500 students as Gemstone president, and advising 18 capstone teams on projects for Meta, Fannie Mae, and Lockheed Martin.</p>
+        <div class="meta"><span class="pill">BAE Systems</span><span class="pill">AlgenAir</span><span class="pill">Gemstone President</span></div>
+      </div>
+      <div class="visual"><div class="vcard"><div class="ph">photo: presenting / team</div><div class="cap">Client work &amp; leadership</div></div></div>
+    </div>
+  </div>
+
+  <div class="marquee"><div class="marquee-inner" id="marq"></div></div>
+
+  <div class="site">
+
+    <section class="section" id="projects">
+      <div class="shead reveal"><span class="idx">i.</span><h2>Projects</h2><div class="line"></div></div>
+      <div class="pgrid">
+        <div class="proj reveal">
+          <div class="pimg">architecture diagram<span class="live">demo slot</span></div>
+          <div class="pbody"><h4>Multi-Region Replication</h4><p>Replication orchestration for live customer data across AWS regions, with enterprise security controls.</p><div class="ptags"><span>java</span><span>typescript</span><span>distributed</span></div></div>
+        </div>
+        <div class="proj reveal">
+          <div class="pimg">flow mockup<span class="live">demo slot</span></div>
+          <div class="pbody"><h4>Cognito Native Auth</h4><p>New authentication flow bringing TouchID / FaceID passkeys to Amazon Cognito, intern-to-launch.</p><div class="ptags"><span>auth</span><span>java</span><span>flutter</span></div></div>
+        </div>
+        <div class="proj reveal">
+          <div class="pimg">risk dashboard shot<span class="live">demo slot</span></div>
+          <div class="pbody"><h4>LLM Risk Tool</h4><p>Llama3-powered feature analysis and risk detection for enterprise IT tickets at BAE Systems.</p><div class="ptags"><span>llm</span><span>python</span><span>consulting</span></div></div>
+        </div>
+        <div class="proj reveal">
+          <div class="pimg">waveform illustration<span class="live">demo slot</span></div>
+          <div class="pbody"><h4>ECHO — Hearing Aid ML</h4><p>Led 9-person team to a published thesis: open-source environmental audio dataset + model benchmarking platform for adaptive hearing aids.</p><div class="ptags"><span>ml</span><span>python</span><span>published 2025</span></div></div>
+        </div>
+        <div class="proj reveal">
+          <div class="pimg">chart placeholder</div>
+          <div class="pbody"><h4>AlgenAir Market Analytics</h4><p>Sales-data analysis in Python that surfaced new consumer segments for a sustainability startup.</p><div class="ptags"><span>data</span><span>python</span><span>strategy</span></div></div>
+        </div>
+        <div class="proj reveal">
+          <div class="pimg">quantum circuit</div>
+          <div class="pbody"><h4>Quantum Sensing Sims</h4><p>Optimized-control quantum sensing simulations on IBM Q — published at APS March Meeting 2021.</p><div class="ptags"><span>quantum</span><span>research</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="experience">
+      <div class="shead reveal"><span class="idx">ii.</span><h2>Experience</h2><div class="line"></div></div>
+      <div class="xlist">
+        <div class="xrow reveal">
+          <div class="when">2025 — now</div>
+          <div><h4><img class="clogo" src="https://www.google.com/s2/favicons?domain=aws.amazon.com&sz=64" alt="">Software Development Engineer · <span class="org">Amazon Web Services</span></h4><p>Multi-region replication for a distributed Java backend and TypeScript control plane.</p></div>
+          <div class="where">Seattle, WA</div>
+        </div>
+        <div class="xrow reveal">
+          <div class="when">2024</div>
+          <div><h4><img class="clogo" src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" alt="">SDE Intern, Amazon Cognito · <span class="org">Amazon Web Services</span></h4><p>Native passkey auth flows (TouchID/FaceID); new AWS endpoint + integration testing tool.</p></div>
+          <div class="where">Seattle, WA</div>
+        </div>
+        <div class="xrow reveal">
+          <div class="when">2024 — 2025</div>
+          <div><h4><img class="clogo" src="https://www.google.com/s2/favicons?domain=umd.edu&sz=64" alt="">Capstone Consulting Advisor · <span class="org">QUEST Honors, UMD</span></h4><p>Advised 18 teams on corporate consulting projects; strategy, ops efficiency, digital transformation.</p></div>
+          <div class="where">College Park, MD</div>
+        </div>
+        <div class="xrow reveal">
+          <div class="when">2023</div>
+          <div><h4><img class="clogo" src="https://www.google.com/s2/favicons?domain=northropgrumman.com&sz=64" alt="">Integration &amp; Test Engineer Intern · <span class="org">Northrop Grumman</span></h4><p>CI tooling in Python/C/MATLAB; major runtime and accuracy improvements across programs.</p></div>
+          <div class="where">Baltimore, MD</div>
+        </div>
+        <div class="xrow reveal">
+          <div class="when">2022 — 2025</div>
+          <div><h4><img class="clogo" src="https://www.google.com/s2/favicons?domain=umd.edu&sz=64" alt="">President, Gemstone Honors · <span class="org">University of Maryland</span></h4><p>Led student operations for a 500-person research honors college; ECHO research team lead.</p></div>
+          <div class="where">College Park, MD</div>
+        </div>
+        <div class="xrow reveal">
+          <div class="when">2020 — 2021</div>
+          <div><h4><img class="clogo" src="https://www.google.com/s2/favicons?domain=jhuapl.edu&sz=64" alt="">Feasibility Research Intern · <span class="org">JHU Applied Physics Lab</span></h4><p>Quantum sensing + spin-locking noise mitigation on IBM Quantum Experience.</p></div>
+          <div class="where">Laurel, MD</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="clients">
+      <div class="shead reveal"><span class="idx">iii.</span><h2>Clients I've worked with</h2><div class="line"></div></div>
+      <div class="clientgrid">
+        <div class="client reveal"><div class="role">Technical Consulting</div><h4><img class="clogo" src="https://www.google.com/s2/favicons?domain=baesystems.com&sz=64" alt="">BAE Systems</h4><p>Redesigned enterprise IT change management; built an LLM risk tool preventing $1M+ in losses.</p></div>
+        <div class="client reveal"><div class="role">Data &amp; Marketing</div><h4><img class="clogo" src="https://www.google.com/s2/favicons?domain=algenair.com&sz=64" alt="">AlgenAir</h4><p>Python analysis of large-scale sales data; surfaced untapped consumer segments that improved sales.</p></div>
+        <div class="client reveal"><div class="role">Process Consulting</div><h4><img class="clogo" src="https://www.google.com/s2/favicons?domain=rhsmith.umd.edu&sz=64" alt="">Smith School of Business</h4><p>Digitized the events-planning workflow for the Office of Programs and Events.</p></div>
+      </div>
+      <div class="sponsors reveal">
+        <div class="sp-label">advised capstone projects for</div>
+        <div class="sp-marquee"><div class="sp-track" id="sptrack"></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="publications">
+      <div class="shead reveal"><span class="idx">iv.</span><h2>Research &amp; Awards</h2><div class="line"></div></div>
+      <div class="pubgrid">
+        <div class="pub reveal"><div class="venue">Gemstone Thesis · UMD DRUM · 2025</div><h4>Hearing Aid Audio Processing Model Benchmarking with Binary Environmental Classification</h4><p>Team ECHO (first author) — open-source environmental audio dataset + benchmarking platform across six audio metrics. Advised by Prof. Sahil Shah.</p></div>
+        <div class="pub reveal"><div class="venue">APS March Meeting · 2021</div><h4>Quantum Sensing Simulation on Quantum Computers using Optimized Control</h4><p>With JHU APL's Quantum Group — co-author on optimized-control sensing simulations.</p></div>
+        <div class="pub reveal"><div class="venue">SPIE Optical Eng. · 2020</div><h4>SIRVLAS: Space-based Ionosonde Receiver &amp; Airglow Sensor</h4><p>CubeSats and SmallSats for Remote Sensing IV — instrument concept publication.</p></div>
+      </div>
+      <div class="awards reveal">
+        <span class="pill">UMD President's Scholarship</span>
+        <span class="pill">National Merit Finalist</span>
+        <span class="pill">US President's Award for Educational Excellence</span>
+        <span class="pill">2nd Place / Best IoT Hack — Disrupt DC</span>
+        <span class="pill">Founder — BlairHacks</span>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <h2 class="reveal">Every good story needs a <em>next chapter</em>.</h2>
+      <p class="reveal">I'm always up for talking distributed systems, product strategy, or whatever you're building. Let's write it together.</p>
+      <div class="btns reveal">
+        <a class="btn primary" href="mailto:rajitzp@gmail.com">Say hello</a>
+        <a class="btn ghost" href="https://www.linkedin.com/in/rajit-mukhopadhyay-67737a19a/" target="_blank">LinkedIn</a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>~ a story still being written · Rajit Mukhopadhyay © 2026 ~</footer>
+
+<div class="endnote">
+  <b>Storybook / hydrangea theme:</b> same bones as before — typewriter frontispiece → paper world with watercolor hydrangea washes → three chapters → sponsors-style capstone banner (icons only, grayscale until hover).<br>
+  Refresh to replay the opening. Tell me what to adjust — petals, palette, type, anything.
+</div>
+
+<script>
+  // ---- frontispiece typewriter ----
+  const frontisLines = [
+    '<span class="small">RAJIT MUKHOPADHYAY</span>',
+    'a story in three chapters',
+    '<span class="small">— turning problems into products —</span>',
+  ];
+  const frontis = document.getElementById('frontis');
+  const veil = document.getElementById('bootveil');
+  let bootDone = false;
+  function finishBoot() {
+    if (bootDone) return;
+    bootDone = true;
+    veil.classList.add('done');
+    document.getElementById('skipboot').style.display = 'none';
+    startHero();
+  }
+  document.getElementById('skipboot').onclick = finishBoot;
+  function typeLine(idx) {
+    if (bootDone) return;
+    if (idx >= frontisLines.length) { setTimeout(finishBoot, 750); return; }
+    const html = frontisLines[idx];
+    const div = document.createElement('div');
+    frontis.insertBefore(div, frontis.lastChild);
+    const plain = html.replace(/<[^>]+>/g, '');
+    let i = 0;
+    const t = setInterval(() => {
+      i++;
+      div.textContent = plain.slice(0, i);
+      if (i >= plain.length) {
+        clearInterval(t);
+        div.innerHTML = html;
+        setTimeout(() => typeLine(idx + 1), 300);
+      }
+    }, 34);
+  }
+  setTimeout(() => typeLine(0), 400);
+
+  // ---- hero entrance ----
+  function startHero() {
+    document.getElementById('kick').classList.add('go');
+    document.getElementById('sub').classList.add('go');
+    document.getElementById('rule').classList.add('go');
+    document.querySelectorAll('#cascade .ltr').forEach((s, i) => {
+      s.style.animationDelay = (0.15 + i * 0.04) + 's';
+      s.classList.add('go');
+    });
+  }
+  (function () {
+    const h = document.getElementById('cascade');
+    const text = h.textContent;
+    h.textContent = '';
+    [...text].forEach((ch) => {
+      const s = document.createElement('span');
+      s.className = 'ltr';
+      s.innerHTML = ch === ' ' ? '&nbsp;' : ch;
+      h.appendChild(s);
+    });
+  })();
+
+  // ---- nav ----
+  const nav = document.getElementById('topnav');
+  const heroObs = new IntersectionObserver((es) => {
+    nav.classList.toggle('show', !es[0].isIntersecting);
+  }, { threshold: 0.15 });
+  heroObs.observe(document.getElementById('hero'));
+
+  // ---- observers ----
+  const chObs = new IntersectionObserver((es) => {
+    es.forEach((e) => { if (e.isIntersecting) e.target.classList.add('on'); });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.chapter').forEach((c) => chObs.observe(c));
+  const rvObs = new IntersectionObserver((es) => {
+    es.forEach((e) => { if (e.isIntersecting) e.target.classList.add('on'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach((el) => rvObs.observe(el));
+
+  // ---- spine ----
+  const story = document.querySelector('.story');
+  const fill = document.getElementById('spinefill');
+  function updateSpine() {
+    const r = story.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const progress = Math.min(1, Math.max(0, (vh * 0.7 - r.top) / r.height));
+    fill.style.height = (progress * 100) + '%';
+  }
+  document.addEventListener('scroll', updateSpine, { passive: true });
+  updateSpine();
+
+  // ---- employer marquee ----
+  (function () {
+    const items = 'AWS &nbsp;·&nbsp; NORTHROP GRUMMAN &nbsp;·&nbsp; JHU APL &nbsp;·&nbsp; UMD &nbsp;·&nbsp; <b>BAE SYSTEMS</b> &nbsp;·&nbsp; <b>ALGENAIR</b> &nbsp;·&nbsp; <b>SMITH SCHOOL</b> &nbsp;·&nbsp; GEMSTONE &nbsp;·&nbsp; QUEST &nbsp;·&nbsp; ';
+    document.getElementById('marq').innerHTML = items + items;
+  })();
+
+  // ---- sponsors-style capstone icon banner ----
+  (function () {
+    const companies = [
+      ['Meta', 'meta.com'],
+      ['Fannie Mae', 'fanniemae.com'],
+      ['Lockheed Martin', 'lockheedmartin.com'],
+      ['McCormick', 'mccormick.com'],
+      ['Thales', 'thalesgroup.com'],
+      ['Capital I', null],
+      ['Intralox', 'intralox.com'],
+      ['Tronox', 'tronox.com'],
+      ['D&H Distributing', 'dandh.com'],
+      ['Bunge', 'bunge.com'],
+    ];
+    const track = document.getElementById('sptrack');
+    let html = '';
+    for (let rep = 0; rep < 2; rep++) {
+      companies.forEach(([name, domain]) => {
+        const img = domain ? `<img src="https://www.google.com/s2/favicons?domain=${domain}&sz=64" alt="">` : '';
+        html += `<span class="sp-item">${img}${name}</span>`;
+      });
+    }
+    track.innerHTML = html;
+  })();
+</script>
+</body>
+</html>
