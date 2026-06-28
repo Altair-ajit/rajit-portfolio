@@ -19,9 +19,39 @@
     --pink: #c98ba6;      /* dusty pink */
     --sage: #7d9a72;      /* leaf green */
     --line: rgba(46,44,56,0.14);
+    --card: var(--card);
+    --shadow: rgba(46,44,56,0.1);
+    --shadow-lg: rgba(86,97,156,0.18);
+    --body-font: Georgia, 'Times New Roman', serif;
+    --label-font: 'Segoe UI', sans-serif;
+    --grain: rgba(46,44,56,0.045);
+    --sel: rgba(124,137,196,0.3);
+    --glass: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #07070f;
+      --paper2: rgba(255,255,255,0.045);
+      --ink: #ffffff;
+      --ink-soft: rgba(255,255,255,0.66);
+      --ink-faint: rgba(255,255,255,0.4);
+      --peri: #2bc8ee;
+      --peri-deep: #5eead4;   /* teal accent */
+      --lav: #9fb4ff;         /* periwinkle */
+      --pink: #d8b4fe;        /* lavender */
+      --sage: #5eead4;
+      --line: rgba(255,255,255,0.12);
+      --card: rgba(255,255,255,0.05);
+      --shadow: rgba(0,0,0,0.45);
+      --shadow-lg: rgba(0,0,0,0.5);
+      --body-font: 'Segoe UI', -apple-system, sans-serif;
+      --grain: transparent;
+      --sel: rgba(94,234,212,0.35);
+      --glass: blur(14px);
+    }
   }
   body {
-    font-family: Georgia, 'Times New Roman', serif; color: var(--ink); overflow-x: hidden;
+    font-family: var(--body-font); color: var(--ink); overflow-x: hidden;
     background:
       linear-gradient(rgba(124,137,196,0.11) 1px, transparent 1px),
       linear-gradient(90deg, rgba(124,137,196,0.11) 1px, transparent 1px),
@@ -30,12 +60,15 @@
       var(--paper);
     background-size: 130px 130px, 130px 130px, 26px 26px, 26px 26px, auto;
   }
-  ::selection { background: rgba(124,137,196,0.3); }
+  @media (prefers-color-scheme: dark) {
+    body { background: var(--paper); }   /* drop the grid paper in dark */
+  }
+  ::selection { background: var(--sel); }
 
-  /* paper grain */
+  /* paper grain (light only — --grain is transparent in dark) */
   body::before {
     content: ''; position: fixed; inset: 0; z-index: 3; pointer-events: none; opacity: 0.5;
-    background-image: radial-gradient(rgba(46,44,56,0.045) 1px, transparent 1px);
+    background-image: radial-gradient(var(--grain) 1px, transparent 1px);
     background-size: 4px 4px;
   }
 
@@ -45,8 +78,17 @@
   #bootveil .frontis { text-align: center; font-size: clamp(17px, 2.4vw, 23px); line-height: 2.3; color: var(--ink); width: min(640px, 90vw); font-style: italic; }
   #bootveil .frontis .small { font-size: 0.72em; color: var(--ink-soft); letter-spacing: 2px; }
   #bootveil .cursor { display: inline-block; width: 2px; height: 1.1em; background: var(--peri-deep); vertical-align: -3px; animation: blink .9s step-end infinite; }
+  /* terminal boot (dark theme) */
+  #bootveil .term { display: none; font-family: 'Cascadia Code', 'Consolas', monospace; font-size: 15px; line-height: 2; color: #d8ffd8; width: min(560px, 88vw); text-align: left; }
+  #bootveil .term .ok { color: #51ff9e; }
+  #bootveil .term .cursor { width: 9px; height: 17px; background: #51ff9e; vertical-align: middle; }
   @keyframes blink { 50% { opacity: 0; } }
   #skipboot { position: fixed; bottom: 20px; right: 24px; z-index: 1001; font-size: 12px; color: var(--ink-faint); cursor: pointer; font-style: italic; }
+  @media (prefers-color-scheme: dark) {
+    #bootveil .frontis { display: none; }
+    #bootveil .term { display: block; }
+    #skipboot { font-family: 'Consolas', monospace; font-style: normal; color: #3a5a3a; }
+  }
 
   /* ---------- watercolor hydrangea washes ---------- */
   .wash-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
@@ -58,6 +100,17 @@
   @keyframes drift1 { to { transform: translate(160px, 110px) scale(1.18); } }
   @keyframes drift2 { to { transform: translate(-140px, -90px) scale(0.92); } }
   @keyframes drift3 { to { transform: translate(-180px, 60px) scale(1.26); } }
+
+  /* ---------- aurora blobs (dark theme) ---------- */
+  .aurora-bg { display: none; position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.5; }
+  .ab1 { width: 620px; height: 620px; background: #3b2bee; top: -160px; left: -120px; animation: drift1 16s ease-in-out infinite alternate; }
+  .ab2 { width: 520px; height: 520px; background: #b22bee; bottom: -200px; right: -100px; animation: drift2 19s ease-in-out infinite alternate; }
+  .ab3 { width: 400px; height: 400px; background: #2bc8ee; top: 45%; left: 60%; animation: drift3 13s ease-in-out infinite alternate; }
+  @media (prefers-color-scheme: dark) {
+    .wash-bg { display: none; }
+    .aurora-bg { display: block; }
+  }
 
   main { position: relative; z-index: 1; }
 
@@ -108,9 +161,9 @@
   .chapter p { color: var(--ink-soft); line-height: 1.75; font-size: 16.5px; }
   .chapter .meta { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
   .pill { font-size: 12px; font-family: 'Segoe UI', sans-serif; padding: 5px 14px; border-radius: 99px; border: 1px solid rgba(86,97,156,0.35); color: var(--peri-deep); background: rgba(124,137,196,0.08); }
-  .vcard { border-radius: 6px; padding: 22px; min-height: 250px; background: #fffdf7; border: 1px solid var(--line); box-shadow: 0 14px 34px rgba(46,44,56,0.1); display: flex; flex-direction: column; justify-content: flex-end; position: relative; overflow: hidden; }
+  .vcard { border-radius: 6px; padding: 22px; min-height: 250px; background: var(--card); border: 1px solid var(--line); box-shadow: 0 14px 34px rgba(46,44,56,0.1); display: flex; flex-direction: column; justify-content: flex-end; position: relative; overflow: hidden; }
   .vcard .ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--ink-faint); font-size: 13.5px; font-style: italic; background: linear-gradient(150deg, rgba(124,137,196,0.1), rgba(201,139,166,0.1)); }
-  .vcard .cap { position: relative; font-size: 13px; color: var(--ink-soft); font-style: italic; background: #fffdf7; padding-top: 8px; }
+  .vcard .cap { position: relative; font-size: 13px; color: var(--ink-soft); font-style: italic; background: var(--card); padding-top: 8px; }
 
   /* ---------- marquee (employers) ---------- */
   .marquee { overflow: hidden; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); background: var(--paper2); margin: 40px 0 0; }
@@ -130,7 +183,7 @@
 
   /* projects */
   .pgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .proj { border-radius: 6px; overflow: hidden; background: #fffdf7; border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(46,44,56,0.06); transition: transform .25s ease, box-shadow .25s; cursor: pointer; }
+  .proj { border-radius: 6px; overflow: hidden; background: var(--card); border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(46,44,56,0.06); transition: transform .25s ease, box-shadow .25s; cursor: pointer; }
   .proj:hover { transform: translateY(-6px) rotate(-0.4deg); box-shadow: 0 20px 40px rgba(86,97,156,0.18); }
   .proj .pimg { height: 130px; background: linear-gradient(135deg, rgba(124,137,196,0.16), rgba(201,139,166,0.16)); display: flex; align-items: center; justify-content: center; color: var(--ink-faint); font-size: 13px; font-style: italic; position: relative; }
   .proj .pimg .live { position: absolute; top: 10px; right: 10px; font-size: 10px; letter-spacing: 1px; padding: 4px 10px; border-radius: 99px; background: rgba(125,154,114,0.14); color: var(--sage); border: 1px solid rgba(125,154,114,0.4); font-family: 'Segoe UI', sans-serif; font-style: normal; }
@@ -139,6 +192,67 @@
   .proj p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.6; font-family: 'Segoe UI', sans-serif; }
   .proj .ptags { margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
   .proj .ptags span { font-size: 11px; font-style: italic; color: var(--peri-deep); }
+  .proj .pimg img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .proj .more { margin-top: 11px; font-size: 12px; font-style: italic; color: var(--peri-deep); opacity: 0; transform: translateX(-4px); transition: opacity .2s, transform .2s; }
+  .proj:hover .more { opacity: 0.85; transform: none; }
+
+  /* ---------- project modal ---------- */
+  #projModal { position: fixed; inset: 0; z-index: 900; display: none; align-items: center; justify-content: center; padding: 24px; }
+  #projModal.open { display: flex; }
+  #projModal .backdrop { position: absolute; inset: 0; background: rgba(46,44,56,0.5); backdrop-filter: blur(5px); opacity: 0; transition: opacity .3s ease; }
+  #projModal.open .backdrop { opacity: 1; }
+  .modal-card { position: relative; z-index: 1; width: min(840px, 94vw); max-height: 90vh; overflow-y: auto; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 30px 80px rgba(46,44,56,0.4); transform: translateY(22px) scale(.97); opacity: 0; transition: transform .38s cubic-bezier(.2,.9,.3,1.1), opacity .34s ease; }
+  #projModal.open .modal-card { transform: none; opacity: 1; }
+  /* themed, minimal scrollbar (light + dark via vars) */
+  .modal-card { scrollbar-width: thin; scrollbar-color: var(--ink-faint) transparent; }
+  .modal-card::-webkit-scrollbar { width: 11px; }
+  .modal-card::-webkit-scrollbar-track { background: transparent; }
+  .modal-card::-webkit-scrollbar-thumb { background: var(--ink-faint); border-radius: 99px; border: 3px solid transparent; background-clip: padding-box; }
+  .modal-card::-webkit-scrollbar-thumb:hover { background: var(--ink-soft); background-clip: padding-box; }
+  .modal-close { position: fixed; z-index: 5; top: 16px; right: 18px; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: rgba(248,244,234,0.94); color: var(--ink-soft); font-size: 19px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .2s, color .2s, transform .2s; }
+  .modal-close:hover { background: var(--peri-deep); color: var(--paper); transform: rotate(90deg); }
+
+  .modal-media { position: relative; background: #efe8d8; border-bottom: 1px solid var(--line); border-radius: 10px 10px 0 0; overflow: hidden; }
+  .modal-media > img, .modal-media > video { display: block; width: 100%; max-height: 56vh; object-fit: contain; background: #2e2c38; }
+  /* video fills the full modal width at its own aspect — no pillarbox bars */
+  .modal-media > video { max-height: none; height: auto; object-fit: fill; background: transparent; }
+  .modal-body { padding: 26px 32px 32px; }
+  .modal-body .eyebrow { font-size: 12px; font-family: 'Segoe UI', sans-serif; letter-spacing: 2px; text-transform: uppercase; color: var(--peri-deep); margin-bottom: 12px; }
+  .modal-body h3 { font-size: 28px; font-weight: 500; letter-spacing: -0.4px; line-height: 1.15; margin-bottom: 16px; }
+  .modal-body .desc { color: var(--ink-soft); line-height: 1.78; font-size: 16px; }
+  .modal-body .mtags { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .modal-body .mlinks { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 24px; }
+  .modal-body .mlinks:empty { display: none; }
+  .modal-body .mlink { display: inline-block; font-size: 14px; font-family: 'Segoe UI', sans-serif; color: var(--peri-deep); text-decoration: none; border-bottom: 1px solid rgba(86,97,156,0.4); padding-bottom: 2px; transition: color .2s, border-color .2s; }
+  .modal-body .mlink:hover { color: var(--lav); border-color: var(--lav); }
+
+  /* gallery */
+  .gal-main { position: relative; background: #2e2c38; display: flex; align-items: center; justify-content: center; min-height: 220px; }
+  .gal-main img { display: block; width: 100%; max-height: 56vh; object-fit: contain; }
+  .gal-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(248,244,234,0.85); color: var(--ink); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .2s; }
+  .gal-nav:hover { background: var(--paper); }
+  .gal-nav.prev { left: 12px; } .gal-nav.next { right: 12px; }
+  .gal-count { position: absolute; bottom: 10px; right: 12px; font-family: 'Segoe UI', sans-serif; font-size: 11px; letter-spacing: 1px; color: var(--paper); background: rgba(46,44,56,0.6); padding: 3px 9px; border-radius: 99px; }
+  .gal-strip { display: flex; gap: 8px; overflow-x: auto; padding: 10px 12px; background: var(--paper2); }
+  .gal-strip img { height: 46px; width: 78px; object-fit: cover; border-radius: 4px; cursor: pointer; opacity: 0.5; border: 1px solid var(--line); transition: opacity .2s, transform .2s; flex: 0 0 auto; }
+  .gal-strip img:hover { opacity: 0.85; }
+  .gal-strip img.active { opacity: 1; outline: 2px solid var(--peri-deep); }
+  .gal-cap { padding: 11px 14px; font-size: 12.5px; font-style: italic; color: var(--ink-soft); background: var(--paper2); border-top: 1px solid var(--line); }
+
+  /* publication card */
+  .pubcard-media { padding: 30px 32px; background: linear-gradient(150deg, rgba(124,137,196,0.12), rgba(201,139,166,0.1)); border-bottom: 1px solid var(--line); }
+  .pubcard-media .pv { font-size: 11px; font-family: 'Segoe UI', sans-serif; letter-spacing: 1.6px; text-transform: uppercase; color: var(--lav); margin-bottom: 12px; }
+  .pubcard-media .pt { font-size: 19px; font-weight: 600; line-height: 1.4; margin-bottom: 12px; }
+  .pubcard-media .pa { font-size: 13px; color: var(--ink-soft); font-style: italic; line-height: 1.6; margin-bottom: 14px; }
+  .pubcard-media .pab { font-size: 13.5px; color: var(--ink-soft); line-height: 1.7; }
+  .pubcard-media .plinks { margin-top: 18px; display: flex; gap: 18px; flex-wrap: wrap; }
+  .pubcard-media .plinks a { font-size: 13px; font-family: 'Segoe UI', sans-serif; color: var(--peri-deep); text-decoration: none; border-bottom: 1px solid rgba(86,97,156,0.4); padding-bottom: 2px; }
+  .pubcard-media .plinks a:hover { color: var(--lav); border-color: var(--lav); }
+
+  /* placeholder */
+  .ph-box { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-height: 240px; padding: 30px; text-align: center; color: var(--ink-faint); background: linear-gradient(150deg, rgba(124,137,196,0.1), rgba(201,139,166,0.1)); }
+  .ph-box .ph-icon { font-size: 30px; opacity: 0.6; }
+  .ph-box .ph-hint { font-size: 13px; font-style: italic; max-width: 320px; line-height: 1.6; }
 
   /* experience */
   .xlist { display: flex; flex-direction: column; }
@@ -153,7 +267,7 @@
 
   /* clients */
   .clientgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 34px; }
-  .client { border-radius: 6px; padding: 24px; background: #fffdf7; border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(46,44,56,0.06); }
+  .client { border-radius: 6px; padding: 24px; background: var(--card); border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(46,44,56,0.06); }
   .client h4 { font-size: 18px; font-weight: 600; margin-bottom: 9px; display: flex; align-items: center; gap: 10px; }
   .client .role { font-size: 11px; font-family: 'Segoe UI', sans-serif; color: var(--pink); letter-spacing: 1.6px; text-transform: uppercase; margin-bottom: 12px; }
   .client p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.65; font-family: 'Segoe UI', sans-serif; }
@@ -175,7 +289,7 @@
 
   /* publications & awards */
   .pubgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 32px; }
-  .pub { border-radius: 6px; padding: 24px; background: #fffdf7; border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(46,44,56,0.06); }
+  .pub { border-radius: 6px; padding: 24px; background: var(--card); border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(46,44,56,0.06); }
   .pub .venue { font-size: 11px; font-family: 'Segoe UI', sans-serif; color: var(--lav); letter-spacing: 1.6px; margin-bottom: 12px; text-transform: uppercase; }
   .pub h4 { font-size: 16.5px; font-weight: 600; line-height: 1.45; margin-bottom: 9px; }
   .pub p { font-size: 13px; color: var(--ink-soft); line-height: 1.6; font-family: 'Segoe UI', sans-serif; }
@@ -205,6 +319,46 @@
     .spine { left: 8px; }
     .xrow { grid-template-columns: 1fr; gap: 4px; }
     nav .links { display: none; }
+    .modal-body { padding: 22px 20px 26px; }
+    .pubcard-media { padding: 22px 20px; }
+    .modal-card { width: 96vw; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .modal-card, #projModal .backdrop, .modal-close { transition: none; }
+  }
+  /* ============ DARK THEME — structural overrides ============ */
+  @media (prefers-color-scheme: dark) {
+    /* glassmorphism on surfaces */
+    .proj, .client, .pub, .vcard { backdrop-filter: var(--glass); }
+    /* hardcoded cream backdrops -> dark */
+    nav { background: rgba(7,7,15,0.72); }
+    .site { background: linear-gradient(180deg, rgba(7,7,15,0) 0%, rgba(7,7,15,0.88) 6%, rgba(9,9,18,0.94) 100%); }
+    .marquee { border-color: var(--line); }
+    .endnote { background: #0a0a14; }
+    /* heading punch (sans, heavier — matches full-site) */
+    #hero h1 { font-weight: 800; letter-spacing: -3px; }
+    .chapter h2, .section .shead h2 { font-weight: 750; }
+    #contact h2 { font-weight: 800; }
+    #contact h2 em { font-style: normal; background: linear-gradient(90deg, #5eead4, #9fb4ff, #d8b4fe); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    /* monospace labels */
+    nav .logo, .chapter .act, .section .shead .idx, .pill, .pub .venue, .xrow .when,
+    .proj .ptags span, .client .role, .modal-body .eyebrow, .pubcard-media .pv { font-family: 'Consolas', monospace; font-style: normal; }
+    .chapter .act { text-transform: uppercase; letter-spacing: 2px; }
+    .chapter .act::before { content: none; }
+    .section .shead .idx { color: var(--peri-deep); }
+    /* tinted image placeholders */
+    .proj .pimg { background: linear-gradient(135deg, rgba(94,234,212,0.13), rgba(159,180,255,0.13)); }
+    .vcard .ph, .ph-box { background: linear-gradient(150deg, rgba(94,234,212,0.1), rgba(159,180,255,0.1)); }
+    .pubcard-media { background: linear-gradient(150deg, rgba(94,234,212,0.1), rgba(159,180,255,0.08)); }
+    .proj .pimg .live { background: rgba(94,234,212,0.15); color: #5eead4; border-color: rgba(94,234,212,0.35); }
+    .proj:hover { border-color: rgba(94,234,212,0.45); box-shadow: 0 18px 44px rgba(0,0,0,0.5); }
+    .spine .fill { box-shadow: 0 0 12px rgba(159,180,255,0.6); }
+    .pill { border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.04); }
+    /* project modal */
+    .modal-close { background: rgba(255,255,255,0.08); color: var(--ink); }
+    .modal-close:hover { background: var(--peri-deep); color: #07070f; }
+    .gal-nav { background: rgba(255,255,255,0.14); color: #fff; }
+    .gal-nav:hover { background: rgba(255,255,255,0.24); }
   }
 </style>
 </head>
@@ -212,10 +366,12 @@
 
 <div id="bootveil">
   <div class="frontis" id="frontis"><span class="cursor"></span></div>
+  <div class="term" id="bootterm"><span class="cursor"></span></div>
 </div>
 <div id="skipboot">skip the opening →</div>
 
 <div class="wash-bg"><div class="wash w1"></div><div class="wash w2"></div><div class="wash w3"></div><div class="wash w4"></div></div>
+<div class="aurora-bg"><div class="blob ab1"></div><div class="blob ab2"></div><div class="blob ab3"></div></div>
 
 <nav id="topnav">
   <div class="logo">Rajit Mukhopadhyay</div>
@@ -281,32 +437,7 @@
 
     <section class="section" id="projects">
       <div class="shead reveal"><span class="idx">i.</span><h2>Projects</h2><div class="line"></div></div>
-      <div class="pgrid">
-        <div class="proj reveal">
-          <div class="pimg">architecture diagram<span class="live">demo slot</span></div>
-          <div class="pbody"><h4>Multi-Region Replication</h4><p>Replication orchestration for live customer data across AWS regions, with enterprise security controls.</p><div class="ptags"><span>java</span><span>typescript</span><span>distributed</span></div></div>
-        </div>
-        <div class="proj reveal">
-          <div class="pimg">flow mockup<span class="live">demo slot</span></div>
-          <div class="pbody"><h4>Cognito Native Auth</h4><p>New authentication flow bringing TouchID / FaceID passkeys to Amazon Cognito, intern-to-launch.</p><div class="ptags"><span>auth</span><span>java</span><span>flutter</span></div></div>
-        </div>
-        <div class="proj reveal">
-          <div class="pimg">risk dashboard shot<span class="live">demo slot</span></div>
-          <div class="pbody"><h4>LLM Risk Tool</h4><p>Llama3-powered feature analysis and risk detection for enterprise IT tickets at BAE Systems.</p><div class="ptags"><span>llm</span><span>python</span><span>consulting</span></div></div>
-        </div>
-        <div class="proj reveal">
-          <div class="pimg">waveform illustration<span class="live">demo slot</span></div>
-          <div class="pbody"><h4>ECHO — Hearing Aid ML</h4><p>Led 9-person team to a published thesis: open-source environmental audio dataset + model benchmarking platform for adaptive hearing aids.</p><div class="ptags"><span>ml</span><span>python</span><span>published 2025</span></div></div>
-        </div>
-        <div class="proj reveal">
-          <div class="pimg">chart placeholder</div>
-          <div class="pbody"><h4>AlgenAir Market Analytics</h4><p>Sales-data analysis in Python that surfaced new consumer segments for a sustainability startup.</p><div class="ptags"><span>data</span><span>python</span><span>strategy</span></div></div>
-        </div>
-        <div class="proj reveal">
-          <div class="pimg">quantum circuit</div>
-          <div class="pbody"><h4>Quantum Sensing Sims</h4><p>Optimized-control quantum sensing simulations on IBM Q — published at APS March Meeting 2021.</p><div class="ptags"><span>quantum</span><span>research</span></div></div>
-        </div>
-      </div>
+      <div class="pgrid" id="pgrid"></div>
     </section>
 
     <section class="section" id="experience">
@@ -385,6 +516,21 @@
   </div>
 </main>
 
+<div id="projModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="backdrop" data-close></div>
+  <button class="modal-close" aria-label="Close" data-close>✕</button>
+  <div class="modal-card">
+    <div class="modal-media" id="modalMedia"></div>
+    <div class="modal-body">
+      <div class="eyebrow" id="modalEyebrow"></div>
+      <h3 id="modalTitle"></h3>
+      <p class="desc" id="modalDesc"></p>
+      <div class="mtags" id="modalTags"></div>
+      <div class="mlinks" id="modalLinks"></div>
+    </div>
+  </div>
+</div>
+
 <footer>~ a story still being written · Rajit Mukhopadhyay © 2026 ~</footer>
 
 <div class="endnote">
@@ -393,13 +539,7 @@
 </div>
 
 <script>
-  // ---- frontispiece typewriter ----
-  const frontisLines = [
-    '<span class="small">RAJIT MUKHOPADHYAY</span>',
-    'a story in three chapters',
-    '<span class="small">— turning problems into products —</span>',
-  ];
-  const frontis = document.getElementById('frontis');
+  // ---- boot intro (typewriter frontispiece in light, terminal in dark) ----
   const veil = document.getElementById('bootveil');
   let bootDone = false;
   function finishBoot() {
@@ -410,25 +550,47 @@
     startHero();
   }
   document.getElementById('skipboot').onclick = finishBoot;
-  function typeLine(idx) {
-    if (bootDone) return;
-    if (idx >= frontisLines.length) { setTimeout(finishBoot, 750); return; }
-    const html = frontisLines[idx];
-    const div = document.createElement('div');
-    frontis.insertBefore(div, frontis.lastChild);
-    const plain = html.replace(/<[^>]+>/g, '');
-    let i = 0;
-    const t = setInterval(() => {
-      i++;
-      div.textContent = plain.slice(0, i);
-      if (i >= plain.length) {
-        clearInterval(t);
-        div.innerHTML = html;
-        setTimeout(() => typeLine(idx + 1), 300);
-      }
-    }, 34);
+
+  function typeInto(container, lines, opts, done) {
+    (function typeLine(idx) {
+      if (bootDone) return;
+      if (idx >= lines.length) { setTimeout(done, opts.endPause); return; }
+      const html = lines[idx];
+      const div = document.createElement('div');
+      container.insertBefore(div, container.lastChild);
+      const plain = html.replace(/<[^>]+>/g, '');
+      let i = 0;
+      const t = setInterval(() => {
+        i++;
+        div.textContent = plain.slice(0, i);
+        if (i >= plain.length) {
+          clearInterval(t);
+          div.innerHTML = html;
+          setTimeout(() => typeLine(idx + 1), opts.gap);
+        }
+      }, opts.speed);
+    })(0);
   }
-  setTimeout(() => typeLine(0), 400);
+
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (prefersDark) {
+    document.getElementById('skipboot').textContent = '[ skip intro ]';
+    const bootLines = [
+      '> boot rajit.dev',
+      '  experience .... <span class="ok">OK</span>',
+      '  clients ....... <span class="ok">OK</span>',
+      '  story ......... <span class="ok">OK</span>',
+      '> tell --from-the-beginning',
+    ];
+    setTimeout(() => typeInto(document.getElementById('bootterm'), bootLines, { speed: 14, gap: 160, endPause: 550 }, finishBoot), 350);
+  } else {
+    const frontisLines = [
+      '<span class="small">RAJIT MUKHOPADHYAY</span>',
+      'a story in three chapters',
+      '<span class="small">— turning problems into products —</span>',
+    ];
+    setTimeout(() => typeInto(document.getElementById('frontis'), frontisLines, { speed: 34, gap: 300, endPause: 750 }, finishBoot), 400);
+  }
 
   // ---- hero entrance ----
   function startHero() {
@@ -449,6 +611,271 @@
       s.className = 'ltr';
       s.innerHTML = ch === ' ' ? '&nbsp;' : ch;
       h.appendChild(s);
+    });
+  })();
+
+  // ---- projects data + modals ----
+  (function () {
+    const AWS = 'media/aws/';
+    const projects = [
+      {
+        id: 'mrr', label: 'architecture diagram', live: true,
+        eyebrow: 'Amazon Web Services · launched Jun 2026',
+        title: 'Cognito Multi-Region Replication',
+        blurb: 'Replication orchestration for live customer data across AWS regions, with enterprise security controls.',
+        tags: ['java', 'typescript', 'distributed'],
+        longDesc: 'As an SDE on Amazon Cognito I helped ship multi-Region replication — syncing user identities, credentials, and user-pool configuration from a primary Region to a near-real-time standby replica. If a Region is disrupted, traffic redirects to the secondary pool and users keep signing in with their existing credentials, with no custom failover code. Generally available June 3, 2026 across 16+ Regions.',
+        link: { label: 'Read the AWS announcement →', href: 'https://aws.amazon.com/blogs/aws/improve-your-application-resilience-with-amazon-cognito-multi-region-replication/' },
+        media: {
+          type: 'gallery',
+          caption: 'From the AWS launch: replication architecture → KMS setup → activation → standby live.',
+          images: [
+            [AWS + '01-architecture.png', 'How Cognito multi-Region replication works — primary Region syncs to a standby replica'],
+            [AWS + '02-kms-select.png', 'Select a customer-managed KMS key to encrypt replicated data'],
+            [AWS + '03-kms-configured.png', 'KMS key selected and configured'],
+            [AWS + '04-checklist.png', 'Remaining configuration checklist (Lambda triggers, WAF, logging)'],
+            [AWS + '05-replication-complete.png', 'Replication complete — ready for manual activation'],
+            [AWS + '06-status-active.png', 'Replication status: Active — the standby Region can accept traffic'],
+          ],
+        },
+      },
+      {
+        id: 'cognito-auth', label: 'flow mockup', live: true,
+        eyebrow: 'Amazon Web Services',
+        title: 'Cognito Native Passkeys',
+        blurb: 'New authentication flow bringing TouchID / FaceID passkeys to Amazon Cognito, intern-to-launch.',
+        tags: ['auth', 'java', 'flutter'],
+        longDesc: 'As a Cognito SDE intern I built native FIDO2 / WebAuthn passkey sign-in (TouchID / FaceID) into Amazon Cognito, plus a new AWS endpoint and an integration-testing tool for the flow — taken from intern prototype to launch.',
+        link: { label: 'AWS: passwordless auth with Cognito & WebAuthn →', href: 'https://aws.amazon.com/blogs/security/how-to-implement-password-less-authentication-with-amazon-cognito-and-webauthn/' },
+        media: { type: 'gif', src: 'media/cognito-passkeys.gif', hint: 'Passkey sign-in demo — drop cognito-passkeys.gif into mockups/media/' },
+      },
+      {
+        id: 'bae', label: 'risk dashboard shot',
+        eyebrow: 'BAE Systems · technical consulting',
+        title: 'LLM Risk Tool',
+        blurb: 'Llama3-powered feature analysis and risk detection for enterprise IT tickets at BAE Systems.',
+        tags: ['llm', 'python', 'consulting'],
+        longDesc: 'Built a Llama3-powered risk-detection tool that analyzed enterprise IT change tickets and flagged high-risk changes before deployment — part of redesigning BAE Systems’ change-management workflow, preventing $1M+ in projected losses.',
+        media: { type: 'gif', src: 'media/bae.gif', hint: 'Risk dashboard demo — drop bae.gif into mockups/media/' },
+      },
+      {
+        id: 'echo', label: 'waveform illustration', live: true, badge: 'live demo',
+        eyebrow: 'Team ECHO · Gemstone Honors, UMD',
+        title: 'ECHO — Hearing Aid ML',
+        blurb: 'Led a 9-person team to a published thesis: open-source environmental audio dataset + model benchmarking platform for adaptive hearing aids.',
+        tags: ['ml', 'python', 'published 2025'],
+        longDesc: 'I led Team ECHO (first author) to a published Gemstone thesis — an open-source environmental-audio dataset and a benchmarking method that uses binary environmental classification to account for sounds a model was never explicitly trained on. It’s now an interactive platform that graphs and compares hearing-aid model performance across real-world environments on six audio metrics (preview above). Advised by Prof. Sahil Shah.',
+        links: [
+          ['View thesis on DRUM', 'https://drum.lib.umd.edu/items/016cc118-4ca2-4cb2-8365-398053d7d016'],
+          ['Download PDF', 'https://drum.lib.umd.edu/bitstreams/f63ac636-bec3-4aef-83cb-ee3a8ed8ccdc/download'],
+        ],
+        media: {
+          type: 'video',
+          poster: 'media/echo-poster.jpg',
+          sources: [
+            { src: 'media/echo.webm', type: 'video/webm' },
+            { src: 'media/echo.mp4', type: 'video/mp4' },
+          ],
+          hint: 'ECHO benchmark platform demo',
+        },
+      },
+      {
+        id: 'algenair', label: 'chart placeholder',
+        eyebrow: 'AlgenAir · data & strategy',
+        title: 'AlgenAir Market Analytics',
+        blurb: 'Sales-data analysis in Python that surfaced new consumer segments for a sustainability startup.',
+        tags: ['data', 'python', 'strategy'],
+        longDesc: 'Analyzed large-scale sales data in Python for AlgenAir, a sustainability hardware startup, surfacing untapped consumer segments that shaped go-to-market strategy and improved sales.',
+        media: { type: 'gif', src: 'media/algenair.gif', hint: 'Analysis charts — drop algenair.gif into mockups/media/' },
+      },
+      {
+        id: 'quantum', label: 'quantum circuit',
+        eyebrow: 'JHU Applied Physics Lab · Quantum Group',
+        title: 'Quantum Sensing Sims',
+        blurb: 'Optimized-control quantum sensing simulations on IBM Q — published at APS March Meeting 2021.',
+        tags: ['quantum', 'research'],
+        longDesc: 'Co-authored optimized-control quantum-sensing simulations at JHU APL, run on the IBM Quantum Experience. The work targets detecting a band-limited stochastic signal in the low-SNR limit, using a variational sensing algorithm that detects the signal through closed-loop optimization.',
+        media: {
+          type: 'publication',
+          venue: 'APS March Meeting 2021 · Session C32.5',
+          ptitle: 'Quantum Sensing Simulation on Quantum Computers using Optimized Control',
+          authors: 'Mukhopadhyay, R.; Xu, E.; Tewala, L.; Manohar, A.; Moss, I.; Clader, D.; Schultz, K.; Quiroz, G. — JHU APL',
+          abstract: '“We use publicly available quantum computers to study standard quantum-sensing protocols and develop new ones via optimized control — detecting a band-limited stochastic signal over background noise at SNR ≪ 1 with a variational sensing algorithm, demonstrated on the IBM Quantum Experience.”',
+          links: [
+            ['APS abstract (C32.5)', 'https://meetings.aps.org/Meeting/MAR21/Session/C32.5'],
+            ['NASA ADS record', 'https://ui.adsabs.harvard.edu/abs/2021APS..MARC32005T/abstract'],
+          ],
+        },
+      },
+    ];
+    const byId = {};
+    projects.forEach((p) => { byId[p.id] = p; });
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+    // render cards
+    const grid = document.getElementById('pgrid');
+    grid.innerHTML = projects.map((p) => {
+      const thumbSrc = p.media.type === 'gallery' ? p.media.images[0][0]
+        : (p.media.type === 'video' && p.media.poster) ? p.media.poster
+        : (p.media.type === 'image' && p.media.src) ? p.media.src
+        : null;
+      const thumb = thumbSrc ? `<img src="${thumbSrc}" alt="" loading="lazy">` : esc(p.label);
+      const live = p.live ? `<span class="live">${esc(p.badge || 'demo slot')}</span>` : '';
+      const tags = p.tags.map((t) => `<span>${esc(t)}</span>`).join('');
+      return `<div class="proj reveal" data-id="${p.id}" tabindex="0" role="button" aria-label="Open ${esc(p.title)}">
+        <div class="pimg">${thumb}${live}</div>
+        <div class="pbody"><h4>${esc(p.title)}</h4><p>${esc(p.blurb)}</p><div class="ptags">${tags}</div><div class="more">click to expand →</div></div>
+      </div>`;
+    }).join('');
+
+    // media renderers -> { html, wire? }
+    function placeholder(hint) {
+      return { html: `<div class="ph-box"><span class="ph-icon">▶</span><div class="ph-hint">${esc(hint)}</div></div>` };
+    }
+    function renderMedia(p) {
+      const m = p.media;
+      if (m.type === 'gallery') {
+        const thumbs = m.images.map((im, i) =>
+          `<img src="${im[0]}" data-i="${i}" class="${i === 0 ? 'active' : ''}" alt="">`).join('');
+        const html = `<div class="gallery">
+          <div class="gal-main">
+            <img id="galMain" src="${m.images[0][0]}" alt="">
+            <button class="gal-nav prev" aria-label="Previous">‹</button>
+            <button class="gal-nav next" aria-label="Next">›</button>
+            <div class="gal-count"><span id="galIdx">1</span>/${m.images.length}</div>
+          </div>
+          <div class="gal-strip">${thumbs}</div>
+          <div class="gal-cap" id="galCap">${esc(m.images[0][1])}</div>
+        </div>`;
+        const wire = (root) => {
+          let i = 0;
+          const main = root.querySelector('#galMain');
+          const cap = root.querySelector('#galCap');
+          const idx = root.querySelector('#galIdx');
+          const strip = [...root.querySelectorAll('.gal-strip img')];
+          const show = (n) => {
+            i = (n + m.images.length) % m.images.length;
+            main.src = m.images[i][0];
+            cap.textContent = m.images[i][1];
+            idx.textContent = i + 1;
+            strip.forEach((t, k) => t.classList.toggle('active', k === i));
+            strip[i].scrollIntoView({ block: 'nearest', inline: 'center' });
+          };
+          root.querySelector('.prev').onclick = () => show(i - 1);
+          root.querySelector('.next').onclick = () => show(i + 1);
+          strip.forEach((t) => { t.onclick = () => show(+t.dataset.i); });
+          root._galKey = (e) => { if (e.key === 'ArrowLeft') show(i - 1); if (e.key === 'ArrowRight') show(i + 1); };
+        };
+        return { html, wire };
+      }
+      if (m.type === 'publication') {
+        const links = m.links.map((l) => `<a href="${l[1]}" target="_blank" rel="noopener">${esc(l[0])} →</a>`).join('');
+        const card = `<div class="pubcard-media">
+          <div class="pv">${esc(m.venue)}</div>
+          <div class="pt">${esc(m.ptitle)}</div>
+          <div class="pa">${esc(m.authors)}</div>
+          <div class="pab">${esc(m.abstract)}</div>
+          <div class="plinks">${links}</div>
+        </div>`;
+        if (m.override) {
+          const html = `<img id="ovImg" src="${m.override}" alt="${esc(m.ptitle)}"><div id="ovFallback" style="display:none">${card}</div>`;
+          const wire = (root) => {
+            const img = root.querySelector('#ovImg');
+            img.onerror = () => { img.style.display = 'none'; root.querySelector('#ovFallback').style.display = 'block'; };
+          };
+          return { html, wire };
+        }
+        return { html: card };
+      }
+      if (m.type === 'gif' || m.type === 'image') {
+        const html = `<img id="mediaImg" src="${m.src}" alt="">`;
+        const wire = (root) => {
+          const img = root.querySelector('#mediaImg');
+          img.onerror = () => { root.innerHTML = placeholder(m.hint || 'Demo coming soon').html; };
+        };
+        return { html, wire };
+      }
+      if (m.type === 'video') {
+        const poster = m.poster ? ` poster="${m.poster}"` : '';
+        const sources = m.sources
+          ? m.sources.map((s) => `<source src="${s.src}" type="${s.type}">`).join('')
+          : (m.src ? `<source src="${m.src}">` : '');
+        const html = `<video id="mediaVid"${poster} autoplay muted loop playsinline controls preload="metadata">${sources}</video>`;
+        const wire = (root) => {
+          const v = root.querySelector('#mediaVid');
+          const fail = () => { root.innerHTML = placeholder(m.hint || 'Video coming soon').html; };
+          v.addEventListener('error', fail);
+          // NETWORK_NO_SOURCE (3): no listed source could be loaded
+          setTimeout(() => { if (v.networkState === 3) fail(); }, 500);
+          if (v.play) v.play().catch(() => {});
+        };
+        return { html, wire };
+      }
+      return placeholder(m.hint || 'Demo coming soon');
+    }
+
+    // modal
+    const modal = document.getElementById('projModal');
+    const mMedia = document.getElementById('modalMedia');
+    const mEye = document.getElementById('modalEyebrow');
+    const mTitle = document.getElementById('modalTitle');
+    const mDesc = document.getElementById('modalDesc');
+    const mTags = document.getElementById('modalTags');
+    const mLinks = document.getElementById('modalLinks');
+    let lastFocus = null;
+
+    function open(id) {
+      const p = byId[id];
+      if (!p) return;
+      mEye.textContent = p.eyebrow || '';
+      mTitle.textContent = p.title;
+      mDesc.textContent = p.longDesc;
+      mTags.innerHTML = p.tags.map((t) => `<span class="pill">${esc(t)}</span>`).join('');
+      const links = p.links || (p.link ? [[p.link.label, p.link.href]] : []);
+      mLinks.innerHTML = links.map(([label, href]) =>
+        `<a class="mlink" href="${href}" target="_blank" rel="noopener">${esc(label)}</a>`).join('');
+      const r = renderMedia(p);
+      mMedia.innerHTML = r.html;
+      if (r.wire) r.wire(mMedia);
+      modal._galKey = mMedia._galKey || null;
+      lastFocus = document.activeElement;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      modal.querySelector('.modal-close').focus();
+      modal.querySelector('.modal-card').scrollTop = 0;
+    }
+    function close() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      const v = mMedia.querySelector('video'); if (v) v.pause();
+      modal._galKey = null;
+      if (lastFocus) lastFocus.focus();
+    }
+
+    grid.addEventListener('click', (e) => {
+      const card = e.target.closest('.proj'); if (card) open(card.dataset.id);
+    });
+    grid.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        const card = e.target.closest('.proj');
+        if (card) { e.preventDefault(); open(card.dataset.id); }
+      }
+    });
+    modal.querySelectorAll('[data-close]').forEach((el) => { el.onclick = close; });
+    document.addEventListener('keydown', (e) => {
+      if (!modal.classList.contains('open')) return;
+      if (e.key === 'Escape') close();
+      else if (modal._galKey) modal._galKey(e);
+      else if (e.key === 'Tab') {
+        // simple focus trap
+        const f = modal.querySelectorAll('button, a[href], [tabindex]:not([tabindex="-1"])');
+        if (!f.length) return;
+        const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
     });
   })();
 
