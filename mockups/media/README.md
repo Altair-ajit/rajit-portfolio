@@ -8,8 +8,7 @@ Still-placeholder projects (drop the file in and the modal lights up automatical
 
 | Project | Expected file | Type | Notes |
 |---------|---------------|------|-------|
-| Cognito Native Passkeys | `cognito-passkeys.gif` | gif | passkey sign-in (TouchID/FaceID) |
-| LLM Risk Tool (BAE) | `bae.gif` | gif | risk dashboard |
+| Native Auth Identity Linking | `cognito-auth.gif` | gif | on-device auth (TouchID/FaceID) → apps |
 | AlgenAir Market Analytics | `algenair.gif` | gif | analysis charts |
 
 Projects already wired with real assets:
@@ -17,6 +16,8 @@ Projects already wired with real assets:
 - **ECHO — Hearing Aid ML** — looping video demo of the benchmark platform:
   `echo.webm` + `echo.mp4` + `echo-poster.jpg` (generated via `docs/preview-recording-prompt.md`).
 - **Cognito Multi-Region Replication** — image gallery in `media/aws/` (real AWS launch screenshots).
+- **LLM Risk Tool (BAE)** — looping video demo: `bae.webm` + `bae.mp4` + `bae-poster.jpg`.
+  (The deck slides in `media/bae/` are no longer wired in — kept on disk in case they're useful.)
 - **Quantum Sensing Sims** — APS / ADS publication card (no local file).
 
 ## Adding a video preview for another project
