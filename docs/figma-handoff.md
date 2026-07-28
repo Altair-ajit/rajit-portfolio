@@ -12,15 +12,9 @@ current source of truth.
 Use the **html.to.design** plugin (by ‹div›RIOTS — free tier is fine):
 
 1. In Figma: **Resources → Plugins → search "html.to.design" → Run**.
-2. Two ways to feed it the site:
-   - **Live URL** (easiest once deployed): paste the site URL, import at
-     1440 px and 390 px widths. Import **twice** — once with "dark mode" off,
-     once on — to capture both themes.
-   - **Local file** (works today): serve the repo locally
-     (`cd mockups && python3 -m http.server 3999`) and use the plugin's
-     browser-extension capture on `http://localhost:3999/`, or send the whole
-     `mockups/` folder and they can serve it themselves. The page has no build
-     step — one HTML file plus the `media/` folder.
+2. Paste the live URL: **https://altair-ajit.github.io/rajit-portfolio/**
+   Import at 1440 px and 390 px widths. Import **twice** — once with
+   "dark mode" off, once on — to capture both themes.
 3. Before capturing, click **"skip the opening →"** (bottom-right) so the boot
    veil doesn't cover the page, and scroll to the bottom once so all
    scroll-reveal sections are in their visible state.
