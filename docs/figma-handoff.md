@@ -108,8 +108,8 @@ Scale (px):
    min, image area + caption row under hairline.
 4. **Marquee** — full-width band, caps ticker of employers/clients.
 5. **About** — card: 84 px round avatar (photo; "RM" monogram fallback) +
-   3-line bio + facts row (Now / Education / Toolbox) + button row
-   (GitHub primary pill + LinkedIn ghost).
+   3-line bio + facts rows (Now / Education / Languages / Hardware &amp;
+   systems / Practices) + button row (GitHub primary pill + LinkedIn ghost).
 6. **Projects** — heading row, then a **horizontal scroller**: 2 rows ×
    340 px columns, 20 gap; soft 56 px edge fades; round overlay chevrons
    (42 px, card bg, elev-md) floating mid-left/right, each shown only when
